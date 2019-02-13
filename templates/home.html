@@ -1,0 +1,141 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>主页</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+  </head>
+  <style type="text/css">
+    .modal-footer ul {
+      list-style:none;
+    }
+    .modal-footer ul li {
+      float: left;
+      width: 20px;
+      height: 20px;
+      margin: 20px;
+      font-size: 30px;
+    }
+    .modal-footer .btn {
+      margin-top: 50px;
+    }
+  </style>
+  <body>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              选择首字母
+            </h4>
+          </div>
+<!--           <div class="modal-body">
+          </div> -->
+          <div class="modal-footer">
+            <ul>
+              <li><a href="{% url 'word_train' 'A' %}">a</a></li>
+              <li><a href="{% url 'word_train' 'B' %}">b</a></li>
+              <li><a href="{% url 'word_train' 'C' %}">c</a></li>
+              <li><a href="{% url 'word_train' 'D' %}">d</a></li>
+              <li><a href="{% url 'word_train' 'E' %}">e</a></li>
+              <li><a href="{% url 'word_train' 'F' %}">f</a></li>
+              <li><a href="{% url 'word_train' 'G' %}">g</a></li>
+              <li><a href="{% url 'word_train' 'H' %}">h</a></li>
+              <li><a href="{% url 'word_train' 'I' %}">i</a></li>
+              <li><a href="{% url 'word_train' 'J' %}">j</a></li>
+              <li><a href="{% url 'word_train' 'K' %}">k</a></li>
+              <li><a href="{% url 'word_train' 'L' %}">l</a></li>
+              <li><a href="{% url 'word_train' 'M' %}">m</a></li>
+              <li><a href="{% url 'word_train' 'N' %}">n</a></li>
+              <li><a href="{% url 'word_train' 'O' %}">o</a></li>
+              <li><a href="{% url 'word_train' 'P' %}">p</a></li>
+              <li><a href="{% url 'word_train' 'Q' %}">q</a></li>
+              <li><a href="{% url 'word_train' 'R' %}">r</a></li>
+              <li><a href="{% url 'word_train' 'S' %}">s</a></li>
+              <li><a href="{% url 'word_train' 'T' %}">t</a></li>
+              <li><a href="{% url 'word_train' 'U' %}">u</a></li>
+              <li><a href="{% url 'word_train' 'V' %}">v</a></li>
+              <li><a href="{% url 'word_train' 'W' %}">w</a></li>
+              <li><a href="{% url 'word_train' 'X' %}">x</a></li>
+              <li><a href="{% url 'word_train' 'Y' %}">y</a></li>
+              <li><a href="{% url 'word_train' 'Z' %}">z</a></li>
+            </ul>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              全部随机
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">背词神器</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">登录</button>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>学习新词!</h1>
+        <p>按照你所选的首字母来学习新单词或者选择乱序随机词进行学习.</p>
+        <p><button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal">开始吧 &raquo;</button></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>查看已学内容</h2>
+          <p>查看自己学习过的词汇. </p>
+          <p><a class="btn btn-default" href="#"  role="button">点击进入 &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
+          <h2>复习已学单词</h2>
+          <p>对已经学习过的新单词进行抗遗忘复习. </p>
+          <p><a class="btn btn-default" href="#" role="button">点击进入 &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>限时测试</h2>
+          <p>在规定的时间内完成随机抽出的单词（单词从已经学习过的词库里选出）.</p>
+          <p><a class="btn btn-default" href="#" role="button">点击进入 &raquo;</a></p>
+        </div>
+      </div>
+    </div> <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <!-- <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!--     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+  </body>
+</html>

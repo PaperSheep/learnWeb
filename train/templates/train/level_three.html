@@ -1,0 +1,140 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
+        <script type="text/javascript">
+            function allowDrop(ev) {
+                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+            }
+            // 拖动标签就调用这个
+            function drag(ev) {
+                // 设置Text的值为触发这个事件的标签的id
+                ev.dataTransfer.setData("Text", ev.target.id);
+            }
+            // 有拖动事件在某标签上面的时候触发
+            function drop(ev) {
+                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+                var data = ev.dataTransfer.getData("Text");  // 把存有拖拽的标签的id的值的Text赋值给data
+                ev.target.appendChild(document.getElementById(data));  // 通过id定位到拖拽标签，然后把该拖拽标签设置为当前接受拖拽标签的标签的子标签
+                var current_id = ev.target.id;
+                if(data.substring(data.length - 1, data.length) == current_id.substring(current_id.length - 1, current_id.length)) {
+                    if (document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length))) {
+                        document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "inputTrue";
+                    }
+                    else {
+                        document.getElementById("word_en_10").className = "inputTrue";
+                    }
+                }
+            }
+    </script>
+    </head>
+    <body>
+        <h1 class="title">请把相应的中文拖放到矩形中：</h1>
+        <div id="background_en" class="bg_en">
+<!--             <div id="card1" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_1" class="en_word">abandon</div>
+                <br>
+            </div>
+            <div id="card2" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_2" class="en_word">ability</div>
+                <br>
+            </div>
+            <div id="card3" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_3" class="en_word">abandon</div>
+                <br>
+            </div>
+            <div id="card4" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_4" class="en_word">ability</div>
+                <br>
+            </div>
+            <div id="card5" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_5" class="en_word">abandon</div>
+                <br>
+            </div>
+            <div id="card6" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_6" class="en_word">ability</div>
+                <br>
+            </div>
+            <div id="card7" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_7" class="en_word">abandon</div>
+                <br>
+            </div>
+            <div id="card8" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_8" class="en_word">ability</div>
+                <br>
+            </div>
+            <div id="card9" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_9" class="en_word">abandon</div>
+                <br>
+            </div>
+            <div id="card10" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_en_10" class="en_word">ability</div>
+                <br>
+            </div> -->
+        </div>
+        <div id="background_zh" class="bg_zh">
+<!--             <div id="space1" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_zh_1" class="zh_word" draggable="true" ondragstart="drag(event)">v.抛弃</div>
+            </div>
+            <div id="space1" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="word_zh_2" class="zh_word" draggable="true" ondragstart="drag(event)">n.有能力的</div>
+            </div> -->
+        </div>
+        <!-- <img id="drag1" src="/i/eg_dragdrop_w3school.gif" draggable="true" ondragstart="drag(event)" /> -->
+        <script type="text/javascript">
+            // 将后台数据转成数组
+            var english_temp = "{{ english|safe }}";
+            var chinese_temp = "{{ chinese|safe }}";
+            // 字符串替换以及字符串转数组
+            var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            // 生成单词区域
+            function createWordSpace() {
+                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="zh_word" draggable="true" ondragstart="drag(event)">[CONTENT]</div></div>';
+
+                // 生成单个词的标签列表
+                var show_text_list = [];
+                for (var i = 0; i < 10; i++) {
+                    show_text_list.push(str_temp.replace(/\[CARD_ID_VALUE\]/g, 'space'+(i+1)).replace(/\[WORD_ID_VALUE\]/g, 'word_zh_'+(i+1)).replace(/\[CONTENT\]/g, chinese[i]));
+                }
+                // 打乱列表
+                var arrLen = show_text_list.length;  //获取数组长度
+                var temp_index_list = new Array();  // 创建数组 存放下标数
+                for (var i = 0; i < arrLen; i++) {
+                    temp_index_list[i] = i;
+                }
+                var random_index_list = new Array();  // 创建数组 生成随机下标数
+                for (var i = 0; i < arrLen; i++) {
+                    random_index_list[i] = temp_index_list.splice(Math.floor(Math.random() * temp_index_list.length), 1);  // splice(位置, 步长) 删除数组指定位置及步长的元素并返回删除值
+                }
+                var end_list = new Array();
+                for (var i = 0; i < arrLen; i++) {
+                    end_list[i] = show_text_list[ random_index_list[i] ];
+                }
+
+                var show_text = '';
+                for (var i = 0; i < 10; i++) {
+                    show_text += end_list[i];
+                }
+                document.getElementById('background_zh').innerHTML = show_text;
+            }
+            function createWordCard() {
+                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="en_word">[CONTENT]</div><br></div>';
+                // 生成单个词的标签
+                var show_text = '';
+                for (var i = 0; i < 10; i++) {
+                    show_text += str_temp.replace(/\[CARD_ID_VALUE\]/g, 'card'+(i+1)).replace(/\[WORD_ID_VALUE\]/g, 'word_en_'+(i+1)).replace(/\[CONTENT\]/g, english[i]);
+                }
+                document.getElementById('background_en').innerHTML = show_text;
+            }
+            function start() {
+                // body...
+                createWordCard();  // 生成英文单词卡
+                createWordSpace();  // 生成中文区域
+            }
+            start();
+        </script>
+    </body>
+</html>
