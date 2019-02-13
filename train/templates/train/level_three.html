@@ -4,7 +4,12 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
         <script type="text/javascript">
+            function stop_drop(event) {
+                    event.preventDefault();
+                    event.stopPropagation();  // 阻止放入拖拽标签
+                }
             function allowDrop(ev) {
                 ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
             }
@@ -12,6 +17,11 @@
             function drag(ev) {
                 // 设置Text的值为触发这个事件的标签的id
                 ev.dataTransfer.setData("Text", ev.target.id);
+            }
+            function checkOver() {
+                if (document.getElementsByClassName("inputTrue").length == 10) {
+                    overbtn.style.visibility = "visible";
+                }
             }
             // 有拖动事件在某标签上面的时候触发
             function drop(ev) {
@@ -26,11 +36,14 @@
                     else {
                         document.getElementById("word_en_10").className = "inputTrue";
                     }
+                    document.getElementById(data).draggable = false;
+                    document.getElementById(current_id).ondrop = "stop_drop(event)";
+                    checkOver();  // 检测是否全部拖入
                 }
             }
     </script>
     </head>
-    <body>
+    <body ondrop="stop_drop(event)">
         <h1 class="title">请把相应的中文拖放到矩形中：</h1>
         <div id="background_en" class="bg_en">
 <!--             <div id="card1" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -82,6 +95,7 @@
                 <div id="word_zh_2" class="zh_word" draggable="true" ondragstart="drag(event)">n.有能力的</div>
             </div> -->
         </div>
+        <a class="btn btn-primary btn-lg train-over" id="overbtn" href="{% url 'home' %}" style="visibility: hidden;">学习结束 &raquo;</a>
         <!-- <img id="drag1" src="/i/eg_dragdrop_w3school.gif" draggable="true" ondragstart="drag(event)" /> -->
         <script type="text/javascript">
             // 将后台数据转成数组
@@ -92,12 +106,12 @@
             var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
             // 生成单词区域
             function createWordSpace() {
-                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="zh_word" draggable="true" ondragstart="drag(event)">[CONTENT]</div></div>';
+                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="zh_word" draggable="true" ondragstart="drag(event)" ondrop="stop_drop(event)">[CONTENT]</div></div>';
 
                 // 生成单个词的标签列表
                 var show_text_list = [];
                 for (var i = 0; i < 10; i++) {
-                    show_text_list.push(str_temp.replace(/\[CARD_ID_VALUE\]/g, 'space'+(i+1)).replace(/\[WORD_ID_VALUE\]/g, 'word_zh_'+(i+1)).replace(/\[CONTENT\]/g, chinese[i]));
+                    show_text_list.push(str_temp.replace(/\[CARD_ID_VALUE\]/g, (i+1)+'space').replace(/\[WORD_ID_VALUE\]/g, 'word_zh_'+(i+1)).replace(/\[CONTENT\]/g, chinese[i]));
                 }
                 // 打乱列表
                 var arrLen = show_text_list.length;  //获取数组长度
@@ -121,7 +135,7 @@
                 document.getElementById('background_zh').innerHTML = show_text;
             }
             function createWordCard() {
-                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="en_word">[CONTENT]</div><br></div>';
+                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)"><div ondrop="stop_drop(event)" id="[WORD_ID_VALUE]" class="en_word">[CONTENT]</div><br></div>';
                 // 生成单个词的标签
                 var show_text = '';
                 for (var i = 0; i < 10; i++) {

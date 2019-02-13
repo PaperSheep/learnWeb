@@ -90,5 +90,9 @@ span {
     /*background: #ffffff;*/
     border-radius: 20px;  /* 圆角属性*/
 }
+.train-over {
+    float: top;
+    margin: 20px 500px;
+}
 /* train_three */
 

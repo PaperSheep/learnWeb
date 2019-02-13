@@ -3,7 +3,7 @@ var anchory = 1;  // 坐标y
 var anchorc = 1;  // 单词坐标
 var wordCount = 0;
 if (document.getElementById("nextBtn")) {
-    document.getElementById("nextBtn").hidden = false;  // 显示下一页面按钮
+    document.getElementById("nextBtn").hidden = true;  // 显示下一页面按钮
 }
 if (document.getElementById("wordCount")) {
     wordCount = Number(document.getElementById("wordCount").innerText);
