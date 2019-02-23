@@ -39,32 +39,30 @@
           </div> -->
           <div class="modal-footer">
             <ul>
-              <li><a href="{% url 'word_train' 'A' %}">a</a></li>
-              <li><a href="{% url 'word_train' 'B' %}">b</a></li>
-              <li><a href="{% url 'word_train' 'C' %}">c</a></li>
-              <li><a href="{% url 'word_train' 'D' %}">d</a></li>
-              <li><a href="{% url 'word_train' 'E' %}">e</a></li>
-              <li><a href="{% url 'word_train' 'F' %}">f</a></li>
-              <li><a href="{% url 'word_train' 'G' %}">g</a></li>
-              <li><a href="{% url 'word_train' 'H' %}">h</a></li>
-              <li><a href="{% url 'word_train' 'I' %}">i</a></li>
-              <li><a href="{% url 'word_train' 'J' %}">j</a></li>
-              <li><a href="{% url 'word_train' 'K' %}">k</a></li>
-              <li><a href="{% url 'word_train' 'L' %}">l</a></li>
-              <li><a href="{% url 'word_train' 'M' %}">m</a></li>
-              <li><a href="{% url 'word_train' 'N' %}">n</a></li>
-              <li><a href="{% url 'word_train' 'O' %}">o</a></li>
-              <li><a href="{% url 'word_train' 'P' %}">p</a></li>
-              <li><a href="{% url 'word_train' 'Q' %}">q</a></li>
-              <li><a href="{% url 'word_train' 'R' %}">r</a></li>
-              <li><a href="{% url 'word_train' 'S' %}">s</a></li>
-              <li><a href="{% url 'word_train' 'T' %}">t</a></li>
-              <li><a href="{% url 'word_train' 'U' %}">u</a></li>
-              <li><a href="{% url 'word_train' 'V' %}">v</a></li>
-              <li><a href="{% url 'word_train' 'W' %}">w</a></li>
-              <li><a href="{% url 'word_train' 'X' %}">x</a></li>
-              <li><a href="{% url 'word_train' 'Y' %}">y</a></li>
-              <li><a href="{% url 'word_train' 'Z' %}">z</a></li>
+              <li><a href="{% url 'word_train' 'A' word_type.type_name %}">a</a></li>
+              <li><a href="{% url 'word_train' 'B' word_type.type_name %}">b</a></li>
+              <li><a href="{% url 'word_train' 'C' word_type.type_name %}">c</a></li>
+              <li><a href="{% url 'word_train' 'D' word_type.type_name %}">d</a></li>
+              <li><a href="{% url 'word_train' 'E' word_type.type_name %}">e</a></li>
+              <li><a href="{% url 'word_train' 'F' word_type.type_name %}">f</a></li>
+              <li><a href="{% url 'word_train' 'G' word_type.type_name %}">g</a></li>
+              <li><a href="{% url 'word_train' 'H' word_type.type_name %}">h</a></li>
+              <li><a href="{% url 'word_train' 'I' word_type.type_name %}">i</a></li>
+              <li><a href="{% url 'word_train' 'J' word_type.type_name %}">j</a></li>
+              <li><a href="{% url 'word_train' 'K' word_type.type_name %}">k</a></li>
+              <li><a href="{% url 'word_train' 'L' word_type.type_name %}">l</a></li>
+              <li><a href="{% url 'word_train' 'M' word_type.type_name %}">m</a></li>
+              <li><a href="{% url 'word_train' 'N' word_type.type_name %}">n</a></li>
+              <li><a href="{% url 'word_train' 'O' word_type.type_name %}">o</a></li>
+              <li><a href="{% url 'word_train' 'P' word_type.type_name %}">p</a></li>
+              <li><a href="{% url 'word_train' 'Q' word_type.type_name %}">q</a></li>
+              <li><a href="{% url 'word_train' 'R' word_type.type_name %}">r</a></li>
+              <li><a href="{% url 'word_train' 'S' word_type.type_name %}">s</a></li>
+              <li><a href="{% url 'word_train' 'T' word_type.type_name %}">t</a></li>
+              <li><a href="{% url 'word_train' 'U' word_type.type_name %}">u</a></li>
+              <li><a href="{% url 'word_train' 'V' word_type.type_name %}">v</a></li>
+              <li><a href="{% url 'word_train' 'W' word_type.type_name %}">w</a></li>
+              <li><a href="{% url 'word_train' 'XYZ' word_type.type_name %}">xyz</a></li>
             </ul>
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭
             </button>
@@ -85,17 +83,35 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">背词神器</a>
+          <li class="navbar-brand dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 选择词库(当前{{ word_type.type_name }}) <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              {% for word_type in word_db_type %}
+                <li><a href="{% url 'band_with_type' word_type.pk %}">{{ word_type.type_name }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">登录</button>
-          </form>
+          {% if user.is_authenticated %}
+            <form class="navbar-form navbar-right" action="{% url 'user_out' %}" method="GET">
+              <a type="submit" class="btn btn-success" href="#">当前用户：{{ user.username }}</a>
+              <button type="submit" class="btn btn-success">退出登录</button>
+            </form>
+          {% else %}
+            <form class="navbar-form navbar-right" action="{% url 'home' %}" method="POST">
+              {% csrf_token %}
+              <div style="color: red">{{ error }}</div>
+              <div class="form-group">
+                <input type="text" placeholder="用户名" name="用户名" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="密码" name="密码" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-success">登录</button>
+              <a type="submit" class="btn btn-success" href="{% url 'register' %}">注册</a>
+            </form>
+          {% endif %}
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
@@ -133,9 +149,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
-    <!-- <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
     <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!--     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
   </body>
 </html>

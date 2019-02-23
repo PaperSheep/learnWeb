@@ -9,10 +9,15 @@ class WordDbType(models.Model):
 
 class Word(models.Model):
     word_db_type = models.ForeignKey(WordDbType, on_delete=models.DO_NOTHING)
-    first_letter = models.CharField(max_length=1)
+    first_letter = models.CharField(max_length=50)
     english = models.CharField(max_length=50)
     phonetic_symbol = models.CharField(max_length=50)
     chinese = models.TextField()
 
+    def __str__(self):
+        return self.english
 
-
+class UserDbWord(models.Model):
+    player = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    # word_db_type = models.ForeignKey(WordDbType, on_delete=models.DO_NOTHING)
+    english = models.ForeignKey(Word, on_delete=models.DO_NOTHING)

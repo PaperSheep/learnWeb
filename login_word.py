@@ -1,21 +1,59 @@
 # 录入数据
 # 把单词批量存进数据库
-
+from django.shortcuts import render_to_response, get_object_or_404
 from train.models import WordDbType, Word
 # import re
 # from django.contrib.auth.models import User
 # user = User.objects.all()[0] 
 
-
-def get_word_list(alphbat):
+# 录入计算机专业英语
+def computer_word_band():
     word_list = []
-    with open('{}_word.txt'.format(alphbat), 'r', encoding='UTF-8') as f:
+    with open('word_band/计算机专业英语/all_word.txt', 'r', encoding='UTF-8') as f:
         for line in f.readlines():
             word_list.append(line.replace('\n', ''))
         # word_list = f.readlines()
     # print(word_list[:5])
     en_list = []
-    sy_list = []
+    sy_list = []  # 音标列表
+    zh_list = []
+    for i in word_list:
+        one_point = i.find(',')
+        tow_point = i.find('/')
+        en_list.append(i[:one_point])
+        # 找不到相应的字符匹配
+        if tow_point == -1:
+            zh_list.append(i[one_point + 1:])
+            sy_list.append('null')
+        else:
+            zh_list.append(i[one_point + 1:tow_point])
+            sy_list.append(i[tow_point:])
+    word_type = get_object_or_404(WordDbType, type_name='计算机专业英语')
+    # word_type = WordDbType.objects.filter(type_name='计算机专业英语')
+    i = 0
+    for en_word in en_list:
+        new_word = Word()
+        new_word.word_db_type = word_type
+        if en_word[0] == 'x' or en_word[0] == 'X' or en_word[0] == 'y' or en_word[0] == 'Y' or en_word[0] == 'z' or en_word[0] == 'Z':
+            new_word.first_letter = 'XYZ'
+        else:
+            new_word.first_letter = en_word[0].upper()
+        new_word.english = en_word
+        new_word.phonetic_symbol = sy_list[i]
+        new_word.chinese = zh_list[i]
+        new_word.save()
+        i += 1
+    print('应该成功吧')
+
+def get_word_list(alphbat):
+    word_list = []
+    with open('word_band/{}_word.txt'.format(alphbat), 'r', encoding='UTF-8') as f:
+        for line in f.readlines():
+            word_list.append(line.replace('\n', ''))
+        # word_list = f.readlines()
+    # print(word_list[:5])
+    en_list = []
+    sy_list = []  # 音标列表
     zh_list = []
     for i in word_list:
         temp_list = i.split('/')
@@ -78,3 +116,4 @@ def clear_words_space():
             a.english = temp_en.replace(' ', '')
             a.save()
     print('清理结束，应该成功的吧')
+

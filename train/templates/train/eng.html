@@ -6,57 +6,34 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
-<!--     <style type="text/css">
-        body{
-            background: black;
-        }
-        span{
-            font-size: 23px;
-        }
-        .wordBoard{
-            width: 1000px;
-            height: 700px;
-            margin: 100px auto;  /* 上下边距100左右自动*/
-            /*background: #d8d8bf;*/
-            background: #ffffff;
-            border-radius: 20px;  /* 圆角属性*/
-        }
-        .selectWord{
-            color: #BC8F8F;
-            /*background: #eaeaae;*/
-            background: #C0C0C0;
-        }
-        .inputTrue{
-            color: #6b8e23;
-        }
-        .wordPlace{
-            float: left;
-            width: 400px;
-            height: 100px;
-            margin: 20px;
-            text-align: center;
-            font-weight: bold;
-            /*line-height: 60px;*/
-            border-radius: 10px;  /* 圆角属性*/
-        }
-    </style> -->
 </head>
 <body class="level_one">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
+        </div>
+      </div>
+    </nav>
     <div id="nextBtn" class="next-btn" hidden="true">
         <form action="{% url 'level_tow' %}" method="post">
             {% csrf_token %}
             <input id="en_word" type="text" name="en_word" value="" hidden="true">
             <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+            <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
             <button type="submit" class="btn btn-success">进行下阶段学习</button>
         </form>
     </div>
     <div class='wordBoard'>
-<!--         <div id='W11' class='selectWord'>
-            <p id='WE11'><span id='W11C1'>a</span><span id='W11C2'>b</span><span id='W11C3'>a</span><span id='W11C4'>n</span><span id='W11C5'>d</span><span id='W11C6'>o</span><span id='W11C7'>n</span></p>
-            <p id='WC11'>丢弃；放弃</p>
-        </div> -->
         <div id='wordCount' hidden='true'>{{ words|length }}</div>
-        <div id='test' hidden='true'></div>
+        <!-- <div id='word_type' hidden='true'>{{ word_type }}</div> -->
+        <!-- <div id='test' hidden='true'></div> -->
         {% for word in words %}
             <div id='W1{{ forloop.counter }}' data-finish='false' class='wordPlace' data-last='{% if forloop.last %}true{% else %}false{% endif %}'>
                 <div id='WE1{{ forloop.counter }}'>
@@ -66,18 +43,6 @@
                 <div id='WC1{{ forloop.counter }}'>{{ word.chinese }}</div>
             </div>
         {% endfor %}
-<!--         <div id='W12'>
-            <p id='WE12'>ability</p>
-            <p id='WC12'>能力；才能</p>
-        </div>
-        <div id='W21'>
-            <p id='WE21'>able</p>
-            <p id='WC21'>能够;有能力的</p>
-        </div>
-        <div id='W22'>
-            <p id='WE22'>abnormal</p>
-            <p id='WC22'>不正常的;变态的</p>
-        </div> -->
     </div>
     <script type="text/javascript" src="{% static 'train/train.js' %}"></script>
     <script type="text/javascript">
@@ -90,91 +55,5 @@
         document.getElementById("en_word").value = english;
         document.getElementById("zh_word").value = chinese;
     </script>
-<!--     <script type="text/javascript">
-        var anchorx = 1;  // 坐标x
-        var anchory = 1;  // 坐标y
-        var anchorc = 1;  // 单词坐标
-        var wordCount = Number(document.getElementById("wordCount").innerText);
-        // 键盘事件响应
-        document.onkeydown = function(event){
-            var ev = event || window.event;
-            var evKeyCode = ev.keyCode;
-            // document.getElementById("test").innerHTML = anchorc;
-            // 如果输入方向键
-            if (evKeyCode == 37 || evKeyCode == 38 || evKeyCode == 39 || evKeyCode == 40) {
-                SelectWord(ev);
-            }
-            else {
-                ChangeWord(ev);
-            }
-        }
-        function ChangeWord(ev){
-            var evKeyCode = ev.keyCode;
-            var selectedLetter = document.getElementById("W" + anchorx + anchory + "C" + anchorc);
-            if (selectedLetter) {
-                // document.write("a".charCodeAt());
-                var inputLetter = String.fromCharCode(evKeyCode + 32);
-                var targetLetter = selectedLetter.innerText;
-                if (targetLetter == inputLetter) {
-                    selectedLetter.className = "inputTrue";
-                    anchorc += 1;
-                }
-            }
-            else
-            {
-                return
-            }
-        }
-        // 选择响应
-        function SelectWord(ev){
-            var evKeyCode = ev.keyCode;
-            var isFinish = document.getElementById("W" + anchorx + anchory).getAttribute("data-finish");
-            anchorc -= 1;
-            if (isFinish != "true") {
-                var selectedLetter = document.getElementById("W" + anchorx + anchory + "C" + anchorc);
-                if (selectedLetter) {
-                    if (selectedLetter.getAttribute("data-last") == "true" && selectedLetter.className == "inputTrue") {
-                        document.getElementById("W" + anchorx + anchory).dataset.finish = "false";
-                    }
-                    else {
-                        for (var i = 0; i < anchorc; i++) {
-                            document.getElementById("W" + anchorx + anchory + "C" + (i+1)).className = "";
-                        }
-                    }
-                }
-            }
-            if (evKeyCode == 37) {
-                if (anchory > 1) {
-                    anchory -= 1;  // 选择左
-                }
-            }
-            else if (evKeyCode == 38) {
-                if (anchory > 2) {
-                    anchory -= 2;  // 选择上
-                }
-            }
-            else if (evKeyCode == 39) {
-                if (anchory < wordCount) {
-                    anchory += 1;  // 选择右
-                }
-            }
-            else if (evKeyCode == 40) {
-                if (anchory < wordCount-1) {
-                    anchory += 2;  // 选择下
-                }
-            }
-            // document.getElementsByClassName("selectWord")[0].className = "";  // 清空选中类别
-            document.getElementsByClassName("selectWord")[0].classList.remove("selectWord");
-            document.getElementById("W" + anchorx + anchory).className += " selectWord";  // 把选中单词赋予类
-            anchorc = 1;  // 字母锚点初始化
-        }
-        function Init(){
-            document.getElementById("W11").className += " selectWord";
-        }
-        // 页面加载
-        window.onload = function(){
-            Init();  // 初始化
-        }
-    </script> -->
 </body>
 </html>

@@ -5,98 +5,14 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
-        <script type="text/javascript">
-            function stop_drop(event) {
-                    event.preventDefault();
-                    event.stopPropagation();  // 阻止放入拖拽标签
-                }
-            function allowDrop(ev) {
-                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
-            }
-            // 拖动标签就调用这个
-            function drag(ev) {
-                // 设置Text的值为触发这个事件的标签的id
-                ev.dataTransfer.setData("Text", ev.target.id);
-            }
-            function checkOver() {
-                if (document.getElementsByClassName("inputTrue").length == 10) {
-                    overbtn.style.visibility = "visible";
-                }
-            }
-            // 有拖动事件在某标签上面的时候触发
-            function drop(ev) {
-                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
-                var data = ev.dataTransfer.getData("Text");  // 把存有拖拽的标签的id的值的Text赋值给data
-                ev.target.appendChild(document.getElementById(data));  // 通过id定位到拖拽标签，然后把该拖拽标签设置为当前接受拖拽标签的标签的子标签
-                var current_id = ev.target.id;
-                if(data.substring(data.length - 1, data.length) == current_id.substring(current_id.length - 1, current_id.length)) {
-                    if (document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length))) {
-                        document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "inputTrue";
-                    }
-                    else {
-                        document.getElementById("word_en_10").className = "inputTrue";
-                    }
-                    document.getElementById(data).draggable = false;
-                    document.getElementById(current_id).ondrop = "stop_drop(event)";
-                    checkOver();  // 检测是否全部拖入
-                }
-            }
-    </script>
     </head>
     <body ondrop="stop_drop(event)">
+        <a class="btn btn-primary btn-lg train-over" id="overbtn" href="{% url 'band_with_type' word_type.pk %}" style="visibility: hidden;">学习结束 &raquo;</a>
         <h1 class="title">请把相应的中文拖放到矩形中：</h1>
         <div id="background_en" class="bg_en">
-<!--             <div id="card1" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_1" class="en_word">abandon</div>
-                <br>
-            </div>
-            <div id="card2" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_2" class="en_word">ability</div>
-                <br>
-            </div>
-            <div id="card3" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_3" class="en_word">abandon</div>
-                <br>
-            </div>
-            <div id="card4" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_4" class="en_word">ability</div>
-                <br>
-            </div>
-            <div id="card5" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_5" class="en_word">abandon</div>
-                <br>
-            </div>
-            <div id="card6" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_6" class="en_word">ability</div>
-                <br>
-            </div>
-            <div id="card7" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_7" class="en_word">abandon</div>
-                <br>
-            </div>
-            <div id="card8" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_8" class="en_word">ability</div>
-                <br>
-            </div>
-            <div id="card9" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_9" class="en_word">abandon</div>
-                <br>
-            </div>
-            <div id="card10" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_en_10" class="en_word">ability</div>
-                <br>
-            </div> -->
         </div>
         <div id="background_zh" class="bg_zh">
-<!--             <div id="space1" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_zh_1" class="zh_word" draggable="true" ondragstart="drag(event)">v.抛弃</div>
-            </div>
-            <div id="space1" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div id="word_zh_2" class="zh_word" draggable="true" ondragstart="drag(event)">n.有能力的</div>
-            </div> -->
         </div>
-        <a class="btn btn-primary btn-lg train-over" id="overbtn" href="{% url 'home' %}" style="visibility: hidden;">学习结束 &raquo;</a>
-        <!-- <img id="drag1" src="/i/eg_dragdrop_w3school.gif" draggable="true" ondragstart="drag(event)" /> -->
         <script type="text/javascript">
             // 将后台数据转成数组
             var english_temp = "{{ english|safe }}";
@@ -149,6 +65,43 @@
                 createWordSpace();  // 生成中文区域
             }
             start();
+        </script>
+        <script type="text/javascript">
+            function stop_drop(event) {
+                    event.preventDefault();
+                    event.stopPropagation();  // 阻止放入拖拽标签
+                }
+            function allowDrop(ev) {
+                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+            }
+            // 拖动标签就调用这个
+            function drag(ev) {
+                // 设置Text的值为触发这个事件的标签的id
+                ev.dataTransfer.setData("Text", ev.target.id);
+            }
+            function checkOver() {
+                if (document.getElementsByClassName("inputTrue").length == 10) {
+                    overbtn.style.visibility = "visible";
+                }
+            }
+            // 有拖动事件在某标签上面的时候触发
+            function drop(ev) {
+                ev.preventDefault();  // 该方法将通知 Web 浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+                var data = ev.dataTransfer.getData("Text");  // 把存有拖拽的标签的id的值的Text赋值给data
+                ev.target.appendChild(document.getElementById(data));  // 通过id定位到拖拽标签，然后把该拖拽标签设置为当前接受拖拽标签的标签的子标签
+                var current_id = ev.target.id;
+                if(data.substring(data.length - 1, data.length) == current_id.substring(current_id.length - 1, current_id.length)) {
+                    if (document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length))) {
+                        document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "inputTrue";
+                    }
+                    else {
+                        document.getElementById("word_en_10").className = "inputTrue";
+                    }
+                    document.getElementById(data).draggable = false;
+                    document.getElementById(current_id).ondrop = "stop_drop(event)";
+                    checkOver();  // 检测是否全部拖入
+                }
+            }
         </script>
     </body>
 </html>

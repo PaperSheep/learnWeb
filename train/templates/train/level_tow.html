@@ -6,38 +6,23 @@
         <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
-<!--     <style type="text/css">
-        .fdck {
-            border:1px solid #c0c0c0;
-            margin:10px auto;
-            padding:5px;
-            background:#f0f0f0;
-            border-radius: 20px;  /* 圆角属性*/
-            width: 150px;
-            height: 150px;
-            font-weight: bold;
-            font-size: 23px;
-        }
-    </style> -->
     <body>
-<!--         <p id="content_en">英文列表</p>
-        <p id="content_zh">中文列表</p> -->
-<!--         <div id="img" style="position: absolute; left: 211; top: 815;visibility :hidden;" align="middle">
-            <span style="CURSOR:hand;color:red;font-weight:bold;font-size:12px" onclick="clearInterval(interval);img.style.visibility = 'hidden'">关闭</span>
-            <div class="fdck">
-                浮动测试TEST
-            </div>
-        </div> -->
+        <div id='wordCount' hidden='true'>{{ english|length }}</div>
         <div id="nextBtn" class="next-btn" hidden="true">
             <form action="{% url 'level_three' %}" method="post">
                 {% csrf_token %}
                 <input id="en_word" type="text" name="en_word" value="" hidden="true">
                 <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+                <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
                 <button type="submit" class="btn btn-success">进行下阶段学习</button>
             </form>
         </div>
         <div id="content_body"></div>
         <script type="text/javascript">
+            var wordCount = 0;
+            if (document.getElementById("wordCount")) {
+                wordCount = Number(document.getElementById("wordCount").innerText);
+            }
             // 将后台数据转成数组
             var english_temp = "{{ english|safe }}";
             var chinese_temp = "{{ chinese|safe }}";
@@ -49,7 +34,7 @@
             // 每个单词卡的id号
             // var words_id = ['word1', 'word2', 'word3', 'word4', 'word5', 'word6', 'word7', 'word8', 'word9', 'word10'];
             var words_id = [];
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < wordCount; i++) {
                 words_id.push("W1" + (i+1));
             }
             // document.getElementById("content_en").innerHTML = english;
@@ -62,7 +47,7 @@
             // 每个单词的移动方向
             var yon = [];
             var xon = [];
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < wordCount; i++) {
                 xPos.push((Math.floor(Math.random()*10)+1) * 9 * (Math.floor(Math.random()*10)+1) * (Math.floor(Math.random()*10)+1));
                 yPos.push((Math.floor(Math.random()*10)+1) * 9 * (Math.floor(Math.random()*10)+1) * (Math.floor(Math.random()*10)+1));
                 yon.push(Math.round(Math.random()));
@@ -120,7 +105,7 @@
                 var str_temp = "<div id='[ID_NUM]' data-finish='false' data-last='[LAST_VALUE]' style='position: absolute; left: 0; top: 0;visibility :hidden;' align='middle'><div class='fdck'>[CONTENTEN]<br><br>[CONTENTZH]</div></div>";
                 // 生成单词标签
                 var show_en_list = [];
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     var temp_word = "";
                     for (var j = 0; j < english[i].length; j++) {
                         if (j != english[i].length - 1) {
@@ -134,7 +119,7 @@
                 }
                 // 生成单词卡标签
                 var inner_text = "";
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     if (i != 9) {
                         inner_text += str_temp.replace(/\[ID_NUM\]/g, words_id[i]).replace(/\[CONTENTEN\]/g, show_en_list[i]).replace(/\[CONTENTZH\]/g, chinese[i]).replace(/\[LAST_VALUE\]/g, "false");
                     }
@@ -144,7 +129,7 @@
                 }
                 document.getElementById("content_body").innerHTML = inner_text;
                 // 遍历单词卡并设置全部显示
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     window[words_id[i]].style.visibility = "visible";
                 }
             }
@@ -152,7 +137,7 @@
                 // img.style.visibility = "visible";
                 // img2.style.visibility = "visible";
                 createWordCard();  // 创建单词浮动卡
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     setInterval('changePos(' + i + ')', 0.6*Math.floor(Math.random()*10) + Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10));
                 }
                 // document.getElementById("W11").className += " selectWord";

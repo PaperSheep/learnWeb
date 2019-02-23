@@ -18,7 +18,10 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.home, name='home'),  # 主页
+    path('logout/', views.user_out, name='user_out'),
+    path('register', views.register, name='register'),
     path('admin/', admin.site.urls),
-    path('train/', include('train.urls')),
+    path('train/', include('train.urls')),  # 训练页面 
+    path('band/<int:word_type_pk>', views.band_with_type, name='band_with_type'),  # 选择词库
 ]
