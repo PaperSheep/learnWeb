@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>主页</title>
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+
+    <!--核心样式-->
+    <link rel="stylesheet" href='{% static "css/an-skill-bar.css" %}'>
+    <link rel="stylesheet" href='{% static "css/main.css" %}'>
   </head>
   <style type="text/css">
     .modal-footer ul {
@@ -101,7 +105,6 @@
           {% else %}
             <form class="navbar-form navbar-right" action="{% url 'home' %}" method="POST">
               {% csrf_token %}
-              <div style="color: red">{{ error }}</div>
               <div class="form-group">
                 <input type="text" placeholder="用户名" name="用户名" class="form-control">
               </div>
@@ -110,6 +113,7 @@
               </div>
               <button type="submit" class="btn btn-success">登录</button>
               <a type="submit" class="btn btn-success" href="{% url 'register' %}">注册</a>
+              <div class="btn" style="color: red">{{ error }}</div>
             </form>
           {% endif %}
         </div><!--/.navbar-collapse -->
@@ -122,6 +126,32 @@
         <h1>学习新词!</h1>
         <p>按照你所选的首字母来学习新单词或者选择乱序随机词进行学习.</p>
         <p><button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal">开始吧 &raquo;</button></p>
+        {% if user.is_authenticated %}
+          <div class="container">
+            <div id="skill">
+              {% for key, value in percent_list.items %}
+                <div class="skillbar {{ key }}">
+                  <div class="filled" data-width="{{ value }}%"></div>
+                  <span class="title">{{ key }}</span>
+                  <span class="percent">{{ value }}%</span>
+                </div>
+              {% endfor %}
+<!--               <div class="skillbar html">
+                <div class="filled" data-width="82.35%"></div>
+                <span class="title">A</span>
+                <span class="percent">80%</span>
+              </div>
+              <a class="btn btn-success"  href="{% url 'word_train' 'A' word_type.type_name %}">开始学习A首字母单词</a>
+              <div class="skillbar html">
+                <div class="filled" data-width="83%"></div>
+                <span class="title">A</span>
+                <span class="percent">80%</span>
+              </div> -->
+            </div>
+          </div>
+        {% else %}
+          <div class="btn" style="color: red">{{ error }}</div>
+        {% endif %}
       </div>
     </div>
 
@@ -150,5 +180,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'an-skill-bar.js' %}"></script>
+    <script src="{% static 'main.js' %}"></script>
   </body>
 </html>

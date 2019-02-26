@@ -117,3 +117,18 @@ def clear_words_space():
             a.save()
     print('清理结束，应该成功的吧')
 
+# 替换中文数据的英文逗号
+def replace_words_comma():
+    all_word = Word.objects.all()
+    for word in all_word:
+        if ',' in word.chinese:
+            temp_zh = word.chinese
+            print(temp_zh)
+            a = Word.objects.get(chinese=temp_zh)
+            a.chinese = temp_zh.replace(',', '，')
+            a.save()
+    print('所有单词替换结束，应该成功的吧')
+
+# 删除重复数据
+def del_repeat_data():
+    pass

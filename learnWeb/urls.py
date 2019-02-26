@@ -19,9 +19,9 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),  # 主页
-    path('logout/', views.user_out, name='user_out'),
-    path('register', views.register, name='register'),
-    path('admin/', admin.site.urls),
+    path('logout/', views.user_out, name='user_out'),  # 注销
+    path('register', views.register, name='register'),  # 注册
+    path('admin/', admin.site.urls),  # 后台
     path('train/', include('train.urls')),  # 训练页面 
     path('band/<int:word_type_pk>', views.band_with_type, name='band_with_type'),  # 选择词库
 ]

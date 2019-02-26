@@ -7,6 +7,13 @@
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
     <body ondrop="stop_drop(event)">
+        <div id='wordCount' hidden='true'>{{ english|length }}</div>
+        <form action="{% url 'finished' %}" method="post">
+            {% csrf_token %}
+            <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
+            <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
+            <button type="submit" class="btn btn-success">学习结束</button>
+        </form>
         <a class="btn btn-primary btn-lg train-over" id="overbtn" href="{% url 'band_with_type' word_type.pk %}" style="visibility: hidden;">学习结束 &raquo;</a>
         <h1 class="title">请把相应的中文拖放到矩形中：</h1>
         <div id="background_en" class="bg_en">
@@ -14,19 +21,27 @@
         <div id="background_zh" class="bg_zh">
         </div>
         <script type="text/javascript">
+            var wordCount = 0;
+            if (document.getElementById("wordCount")) {
+                wordCount = Number(document.getElementById("wordCount").innerText);
+            }
             // 将后台数据转成数组
             var english_temp = "{{ english|safe }}";
             var chinese_temp = "{{ chinese|safe }}";
+            var word_pk_temp = "{{ word_pk|safe }}";
             // 字符串替换以及字符串转数组
             var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
             var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            var word_pk = word_pk_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            // document.getElementById("en_word").value = english;
+            document.getElementById("word_pk").value = word_pk;
             // 生成单词区域
             function createWordSpace() {
                 var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card" ondrop="drop(event)" ondragover="allowDrop(event)"><div id="[WORD_ID_VALUE]" class="zh_word" draggable="true" ondragstart="drag(event)" ondrop="stop_drop(event)">[CONTENT]</div></div>';
 
                 // 生成单个词的标签列表
                 var show_text_list = [];
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     show_text_list.push(str_temp.replace(/\[CARD_ID_VALUE\]/g, (i+1)+'space').replace(/\[WORD_ID_VALUE\]/g, 'word_zh_'+(i+1)).replace(/\[CONTENT\]/g, chinese[i]));
                 }
                 // 打乱列表
@@ -45,16 +60,16 @@
                 }
 
                 var show_text = '';
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     show_text += end_list[i];
                 }
                 document.getElementById('background_zh').innerHTML = show_text;
             }
             function createWordCard() {
-                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)"><div ondrop="stop_drop(event)" id="[WORD_ID_VALUE]" class="en_word">[CONTENT]</div><br></div>';
+                var str_temp = '<div id="[CARD_ID_VALUE]" class="word_card"  ondrop="drop(event)" ondragover="allowDrop(event)"><div ondrop="stop_drop(event)" id="[WORD_ID_VALUE]" class="en_word">[CONTENT]</div></div>';
                 // 生成单个词的标签
                 var show_text = '';
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < wordCount; i++) {
                     show_text += str_temp.replace(/\[CARD_ID_VALUE\]/g, 'card'+(i+1)).replace(/\[WORD_ID_VALUE\]/g, 'word_en_'+(i+1)).replace(/\[CONTENT\]/g, english[i]);
                 }
                 document.getElementById('background_en').innerHTML = show_text;
@@ -64,9 +79,6 @@
                 createWordCard();  // 生成英文单词卡
                 createWordSpace();  // 生成中文区域
             }
-            start();
-        </script>
-        <script type="text/javascript">
             function stop_drop(event) {
                     event.preventDefault();
                     event.stopPropagation();  // 阻止放入拖拽标签
@@ -80,7 +92,7 @@
                 ev.dataTransfer.setData("Text", ev.target.id);
             }
             function checkOver() {
-                if (document.getElementsByClassName("inputTrue").length == 10) {
+                if (document.getElementsByClassName("inputTrue").length == wordCount) {
                     overbtn.style.visibility = "visible";
                 }
             }
@@ -95,13 +107,14 @@
                         document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "inputTrue";
                     }
                     else {
-                        document.getElementById("word_en_10").className = "inputTrue";
+                        document.getElementById("word_en_" + wordCount).className = "inputTrue";
                     }
                     document.getElementById(data).draggable = false;
                     document.getElementById(current_id).ondrop = "stop_drop(event)";
                     checkOver();  // 检测是否全部拖入
                 }
             }
+            start();
         </script>
     </body>
 </html>

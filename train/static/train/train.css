@@ -17,6 +17,7 @@ span {
     color: #BC8F8F;
     /*background: #eaeaae;*/
     background: #C0C0C0;
+    border-radius: 10px;  /* 圆角属性*/
 }
 .inputTrue {
     color: #6b8e23;
@@ -49,7 +50,7 @@ span {
     margin:10px auto;
     padding:5px;
     background:#f0f0f0;
-    border-radius: 20px;  /* 圆角属性*/
+    border-radius: 10px;  /* 圆角属性*/
     width: 150px;
     height: 150px;
     font-weight: bold;
@@ -66,6 +67,7 @@ span {
     border: 1px solid #aaaaaa;
     text-align: center;
     font-weight: bold;
+    font-size: 23px;
     margin-left: 30px;
     border-radius: 10px;  /* 圆角属性*/
 }

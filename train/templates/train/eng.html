@@ -8,15 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
 </head>
 <body class="level_one">
+<!--     <p id="test" hidden="true">123</p> -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
         </div>
       </div>
@@ -26,6 +21,7 @@
             {% csrf_token %}
             <input id="en_word" type="text" name="en_word" value="" hidden="true">
             <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+            <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
             <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
             <button type="submit" class="btn btn-success">进行下阶段学习</button>
         </form>
@@ -46,14 +42,20 @@
     </div>
     <script type="text/javascript" src="{% static 'train/train.js' %}"></script>
     <script type="text/javascript">
-        // 将后台数据转成数组
-        var english_temp = "{{ english|safe }}";
-        var chinese_temp = "{{ chinese|safe }}";
-        // 字符串替换以及字符串转数组
-        var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
-        var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
-        document.getElementById("en_word").value = english;
-        document.getElementById("zh_word").value = chinese;
+        function start() {
+            // 将后台数据转成数组
+            var english_temp = "{{ english|safe }}";
+            var chinese_temp = "{{ chinese|safe }}";
+            var word_pk_temp = "{{ word_pk|safe }}";
+            // 字符串替换以及字符串转数组
+            var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            var word_pk = word_pk_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            document.getElementById("en_word").value = english;
+            document.getElementById("zh_word").value = chinese;
+            document.getElementById("word_pk").value = word_pk;
+        }
+        start();
     </script>
 </body>
 </html>

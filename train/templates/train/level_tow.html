@@ -13,6 +13,7 @@
                 {% csrf_token %}
                 <input id="en_word" type="text" name="en_word" value="" hidden="true">
                 <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+                <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
                 <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
                 <button type="submit" class="btn btn-success">进行下阶段学习</button>
             </form>
@@ -26,11 +27,14 @@
             // 将后台数据转成数组
             var english_temp = "{{ english|safe }}";
             var chinese_temp = "{{ chinese|safe }}";
+            var word_pk_temp = "{{ word_pk|safe }}";
             // 字符串替换以及字符串转数组
             var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
             var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+            var word_pk = word_pk_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
             document.getElementById("en_word").value = english;
             document.getElementById("zh_word").value = chinese;
+            document.getElementById("word_pk").value = word_pk;
             // 每个单词卡的id号
             // var words_id = ['word1', 'word2', 'word3', 'word4', 'word5', 'word6', 'word7', 'word8', 'word9', 'word10'];
             var words_id = [];

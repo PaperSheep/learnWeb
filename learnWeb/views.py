@@ -1,8 +1,18 @@
 from django.shortcuts import render_to_response, get_object_or_404, redirect
-from train.models import WordDbType, Word
+from train.models import WordDbType, Word, UserDbWord
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+
+# 返回列表数据
+def list_data(word_type, context):
+    first_letter_list = Word.objects.values('first_letter').distinct()
+    percent_list = {}
+    for letter in first_letter_list:
+        word_list = Word.objects.filter(word_db_type=word_type, first_letter=letter['first_letter'])
+        user_word = UserDbWord.objects.filter(player=context['user'], english__in=word_list)
+        percent_list[letter['first_letter']] = round(round(user_word.count() / word_list.count(), 2) * 100)
+    context['percent_list'] = percent_list
 
 # 默认主页
 def home(request):
@@ -23,11 +33,16 @@ def home(request):
             context['user'] = user
             login(request, user)
             # context['error'] = ''
+            list_data(word_type, context)
             return render_to_response('home.html', context)
     else:
         if request.user.is_authenticated:
             context['user'] = request.user
-        return render_to_response('home.html', context)
+            list_data(word_type, context)
+            return render_to_response('home.html', context)
+        else:
+            context['error'] = '未登录'
+            return render_to_response('home.html', context)
 
 # 退出登录
 def user_out(request):
@@ -66,4 +81,5 @@ def band_with_type(request, word_type_pk):
     context['word_type'] = word_type
     # context['already'] = 'yes'
     context['user'] = request.user
+    list_data(word_type, context)
     return render_to_response('home.html', context)

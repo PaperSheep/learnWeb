@@ -1,0 +1,62 @@
+/*
+    * Plugin :  an-skill-bar
+    * Version: 1.0.1
+    * Description: A plugin that fills bars with a percentage you set.
+    * Author: Hasan Misbah
+    * Copyright 2018, Hasan Misbah
+    * Free to use and abuse under the MIT license.
+    * http://www.opensource.org/licenses/mit-license.php
+    */.skillbar{width:100%;padding:10px;margin:10px 0;position:relative;display:block;overflow:hidden;height:30px;background-color:#fff;border-radius:5px 0 0 5px}
+    .skillbar.A .title{background-color:#c96300}
+    .skillbar.A .filled{background-color:#ff8817}
+    .skillbar.B .title{background-color:#0f5487}
+    .skillbar.B .filled{background-color:#177fcb}
+    .skillbar.C .title{background-color:#f0b109}
+    .skillbar.C .filled{background-color:#f8ca4d}
+    .skillbar.D .title{background-color:#3d4670}
+    .skillbar.D .filled{background-color:#5864a2}
+    .skillbar.E .title{background-color:#064a7a}
+    .skillbar.E .filled{background-color:#0977c3}
+    .skillbar.F .title{background-color:#ba437d}
+    .skillbar.F .filled{background-color:#cf7aa4}
+    .skillbar.G .title{background-color:#1f3861}
+    .skillbar.G .filled{background-color:#31599b}
+    .skillbar.H .title{background-color:#33c7f0}
+    .skillbar.H .filled{background-color:#7adbf5}
+    .skillbar.I .title{background-color:#5e8f35}
+    .skillbar.I .filled{background-color:#83bf51}
+    .skillbar.J .title{background-color:#8f0023}
+    .skillbar.J .filled{background-color:#dc0035}
+    .skillbar.K .title{background-color:#2f8f67}
+    .skillbar.K .filled{background-color:#47c390}
+    .skillbar.L .title{background-color:#cc2b2c}
+    .skillbar.L .filled{background-color:#de6566}
+    .skillbar.M .title{background-color:#005086}
+    .skillbar.M .filled{background-color:#007dd3}
+    .skillbar.N .title{background-color:#c63d2d}
+    .skillbar.N .filled{background-color:#dc7064}
+    .skillbar.O .title{background-color:#003e58}
+    .skillbar.O .filled{background-color:#0073a5}
+    .skillbar.P .title{background-color:#295479}
+    .skillbar.P .filled{background-color:#3d7cb2}
+    .skillbar.Q .title{background-color:#010705}
+    .skillbar.Q .filled{background-color:#0e4731}
+    .skillbar.R .title{background-color:#198cb7}
+    .skillbar.R .filled{background-color:#37b6e4}
+    .skillbar.S .title{background-color:#211a56}
+    .skillbar.S .filled{background-color:#382c90}
+    .skillbar.T .title{background-color:#572e11}
+    .skillbar.T .filled{background-color:#98511d}
+    .skillbar.U .title{background-color:#a42b69}
+    .skillbar.U .filled{background-color:#d04c8f}
+    .skillbar.V .title{background-color:#f0280f}
+    .skillbar.V .filled{background-color:#f56856}
+    .skillbar.W .title{background-color:#a82b69}
+    .skillbar.W .filled{background-color:#d84c8f}
+    .skillbar.XYZ .title{background-color:#f8280f}
+    .skillbar.XYZ .filled{background-color:#f86856}
+    .skillbar .title{background-color:rgba(0,0,0,.6);height:30px;width:85px;text-align:center;left:0;color:#f0f0f0;border-radius:5px 0 0 5px}
+    .skillbar .percent,.skillbar .title{padding:5px;position:absolute;top:0;z-index:9}
+    .skillbar .percent{right:0;color:#000;font-weight:700}
+    .skillbar .filled{z-index:8;position:absolute;top:0;left:0;background-color:rgba(0,80,80,.3);height:100%;width:20px;border-radius:5px 0 0 5px}
+/*# sourceMappingURL=an-skill-bar.css.map */
