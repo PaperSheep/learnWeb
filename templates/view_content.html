@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="jumbotron">
+        {% for word in user_word %}
+            <div class="container" style="border-radius: 10px; background-color: #fff; margin-bottom: 5px">
+              <p>{{ forloop.counter }}.{{ word.english }}&nbsp;&nbsp;&nbsp;{{ word.english.chinese }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -28,6 +28,55 @@
     }
   </style>
   <body>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              选择首字母
+            </h4>
+          </div>
+<!--           <div class="modal-body">
+          </div> -->
+          <div class="modal-footer">
+            <ul>
+              <li><a href="{% url 'word_train' 'A' word_type.type_name %}">a</a></li>
+              <li><a href="{% url 'word_train' 'B' word_type.type_name %}">b</a></li>
+              <li><a href="{% url 'word_train' 'C' word_type.type_name %}">c</a></li>
+              <li><a href="{% url 'word_train' 'D' word_type.type_name %}">d</a></li>
+              <li><a href="{% url 'word_train' 'E' word_type.type_name %}">e</a></li>
+              <li><a href="{% url 'word_train' 'F' word_type.type_name %}">f</a></li>
+              <li><a href="{% url 'word_train' 'G' word_type.type_name %}">g</a></li>
+              <li><a href="{% url 'word_train' 'H' word_type.type_name %}">h</a></li>
+              <li><a href="{% url 'word_train' 'I' word_type.type_name %}">i</a></li>
+              <li><a href="{% url 'word_train' 'J' word_type.type_name %}">j</a></li>
+              <li><a href="{% url 'word_train' 'K' word_type.type_name %}">k</a></li>
+              <li><a href="{% url 'word_train' 'L' word_type.type_name %}">l</a></li>
+              <li><a href="{% url 'word_train' 'M' word_type.type_name %}">m</a></li>
+              <li><a href="{% url 'word_train' 'N' word_type.type_name %}">n</a></li>
+              <li><a href="{% url 'word_train' 'O' word_type.type_name %}">o</a></li>
+              <li><a href="{% url 'word_train' 'P' word_type.type_name %}">p</a></li>
+              <li><a href="{% url 'word_train' 'Q' word_type.type_name %}">q</a></li>
+              <li><a href="{% url 'word_train' 'R' word_type.type_name %}">r</a></li>
+              <li><a href="{% url 'word_train' 'S' word_type.type_name %}">s</a></li>
+              <li><a href="{% url 'word_train' 'T' word_type.type_name %}">t</a></li>
+              <li><a href="{% url 'word_train' 'U' word_type.type_name %}">u</a></li>
+              <li><a href="{% url 'word_train' 'V' word_type.type_name %}">v</a></li>
+              <li><a href="{% url 'word_train' 'W' word_type.type_name %}">w</a></li>
+              <li><a href="{% url 'word_train' 'XYZ' word_type.type_name %}">xyz</a></li>
+            </ul>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+              全部随机
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+    </div>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -76,9 +125,9 @@
       <div class="container">
         <h1>学习新词!</h1>
         <p>按照你所选的首字母来学习新单词或者选择乱序随机词进行学习.</p>
-        <p><button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal" onclick="showPanel()">开始吧 &raquo;</button></p>
+        <p><button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal">开始吧 &raquo;</button></p>
         {% if user.is_authenticated %}
-          <div class="container" hidden="true" id="panel">
+          <div class="container">
             <div id="skill">
               {% for key, value in percent_list.items %}
                 <div class="skillbar {{ key }}">
@@ -86,11 +135,6 @@
                   <span class="title">{{ key }}</span>
                   <span class="percent">{{ value }}%</span>
                 </div>
-                {% if value == 100 %}
-                  <div class="btn btn-success"> 已完成 </div>
-                {% else %}
-                  <a class="btn btn-success"  href="{% url 'word_train' key word_type.type_name %}">开始学习{{ key }}首字母单词</a>
-                {% endif %}
               {% endfor %}
 <!--               <div class="skillbar html">
                 <div class="filled" data-width="82.35%"></div>
@@ -117,12 +161,12 @@
         <div class="col-md-4">
           <h2>查看已学内容</h2>
           <p>查看自己学习过的词汇. </p>
-          <p><a class="btn btn-default" href="{% url 'view_page' word_type.pk %}"  role="button">点击进入 &raquo;</a></p>
+          <p><a class="btn btn-default" href="#"  role="button">点击进入 &raquo;</a></p>
        </div>
         <div class="col-md-4">
           <h2>复习已学单词</h2>
           <p>对已经学习过的新单词进行抗遗忘复习. </p>
-          <p><a class="btn btn-default" href="{% url 'review_page' word_type.pk %}" role="button">点击进入 &raquo;</a></p>
+          <p><a class="btn btn-default" href="#" role="button">点击进入 &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>限时测试</h2>
@@ -138,15 +182,5 @@
     <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'an-skill-bar.js' %}"></script>
     <script src="{% static 'main.js' %}"></script>
-    <script type="text/javascript">
-      function showPanel() {
-        if ($("#panel").is(":hidden")) {
-               $("#panel").show();    //如果元素为隐藏,则将它显现
-        }
-        else {
-              $("#panel").hide();     //如果元素为显现,则将其隐藏
-        }
-      }
-    </script>
   </body>
 </html>

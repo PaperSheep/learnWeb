@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import WordDbType, Word, UserDbWord
+from .models import WordDbType, Word, UserWord
 
 @admin.register(WordDbType)
 class WordDbTypeAdmin(admin.ModelAdmin):
@@ -9,7 +9,7 @@ class WordDbTypeAdmin(admin.ModelAdmin):
 class WordAdmin(admin.ModelAdmin):
     list_display = ('id' ,'word_db_type', 'first_letter', 'english', 'phonetic_symbol', 'chinese')
 
-@admin.register(UserDbWord)
-class UserDbWordAdmin(admin.ModelAdmin):
-    list_display = ('id', 'player', 'english')
+@admin.register(UserWord)
+class UserWordAdmin(admin.ModelAdmin):
+    list_display = ('id', 'player', 'english', 'review_time', 'review_count', 'mastery_level')
 

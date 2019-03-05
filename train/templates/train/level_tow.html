@@ -7,17 +7,25 @@
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
     <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
+              <div class="navbar-brand" style="color: green;">请拼写选中的单词</div>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form id="nextBtn" class="navbar-form navbar-right" hidden="true" action="{% url 'level_three' %}" method="post">
+                    {% csrf_token %}
+                    <input id="en_word" type="text" name="en_word" value="" hidden="true">
+                    <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+                    <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
+                    <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
+                    <button type="submit" class="btn btn-success">进行下阶段学习</button>
+                </form>
+            </div><!--/.navbar-collapse -->
+          </div>
+        </nav>
         <div id='wordCount' hidden='true'>{{ english|length }}</div>
-        <div id="nextBtn" class="next-btn" hidden="true">
-            <form action="{% url 'level_three' %}" method="post">
-                {% csrf_token %}
-                <input id="en_word" type="text" name="en_word" value="" hidden="true">
-                <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
-                <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
-                <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
-                <button type="submit" class="btn btn-success">进行下阶段学习</button>
-            </form>
-        </div>
         <div id="content_body"></div>
         <script type="text/javascript">
             var wordCount = 0;
@@ -68,7 +76,7 @@
                 // for (var i = 0; i < 1; i++) {
                     wordId = words_id[i];
                     window[wordId].style.top = yPos[i];
-                    width = document.body.clientWidth
+                    width = document.body.clientWidth;
                     height = document.body.clientHeight;
                     Hoffset = window[wordId].offsetHeight;
                     Woffset = window[wordId].offsetWidth;
@@ -80,9 +88,9 @@
                     else {
                         yPos[i] = yPos[i] - step;
                     }
-                    if (yPos[i] < 0) {
+                    if (yPos[i] < 30) {
                         yon[i] = 1;
-                        yPos[i] = 0;
+                        yPos[i] = 30;
                     }
                     if (yPos[i] >= (height - Hoffset)) {
                         yon[i] = 0;
@@ -142,7 +150,7 @@
                 // img2.style.visibility = "visible";
                 createWordCard();  // 创建单词浮动卡
                 for (var i = 0; i < wordCount; i++) {
-                    setInterval('changePos(' + i + ')', 0.6*Math.floor(Math.random()*10) + Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10));
+                    setInterval('changePos(' + i + ')', 10 + i * 1.2);  // 定时运行某个函数
                 }
                 // document.getElementById("W11").className += " selectWord";
             }

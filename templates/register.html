@@ -1,28 +1,38 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh-hans">
 <head>
     <meta charset="UTF-8">
     <title>注册页面</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
 </head>
 <body>
-    <h1>注册</h1>
-    {% if register_form.errors %}
-        <div>{{ register_form.errors }}</div>
-    {% endif %}
-    <form action="" method="POST">
-        <p>
-            <label for="id_username">用户名:</label>
-            <input type="text" name="username" value="god" maxlength="150" autofocus required id="id_username">
-        </p>
-        <p>
-            <label for="id_password1">密码:</label> 
-            <input type="password" name="password1" required id="id_password1">
-        </p>
-        <p>
-            <label for="id_password2">密码确认:</label> 
-            <input type="password" name="password2" required id="id_password2"> 
-        </p>
-        <button type="submit">注册</button>
-    </form>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'home' %}">返回主页</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+
+      <form class="form-signin" action="" method="POST">
+        <h2 class="form-signin-heading">注册</h2>
+        <label for="inputEmail" class="sr-only">用户名:</label>
+        <input type="text" name="username" id="id_username" class="form-control" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">密码:</label>
+        <input type="password" name="password1" id="id_password1" class="form-control" placeholder="密码" required>
+        <label for="inputPassword" class="sr-only">确认密码:</label>
+        <input type="password" name="password2" id="id_password2" class="form-control" placeholder="确认密码" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+      </form>
+        {% if register_form.errors %}
+            <div>{{ register_form.errors }}</div>
+        {% endif %}
+    </div> <!-- /container -->
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
+

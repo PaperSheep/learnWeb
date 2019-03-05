@@ -47,7 +47,7 @@ def computer_word_band():
 
 def get_word_list(alphbat):
     word_list = []
-    with open('word_band/{}_word.txt'.format(alphbat), 'r', encoding='UTF-8') as f:
+    with open('word_band/CET6/{}_word.txt'.format(alphbat), 'r', encoding='UTF-8') as f:
         for line in f.readlines():
             word_list.append(line.replace('\n', ''))
         # word_list = f.readlines()
@@ -82,7 +82,8 @@ def get_word_list(alphbat):
 
 
 def do_it(alphbat):
-    word_type = WordDbType.objects.all()[0]
+    word_type = get_object_or_404(WordDbType, type_name='CET6')
+    # word_type = WordDbType.objects.all()[0]
     en_list = []
     sy_list = []
     zh_list = []
@@ -91,7 +92,11 @@ def do_it(alphbat):
     for en_word in en_list:
         new_word = Word()
         new_word.word_db_type = word_type
-        new_word.first_letter = alphbat
+        if en_word[0] == 'x' or en_word[0] == 'X' or en_word[0] == 'y' or en_word[0] == 'Y' or en_word[0] == 'z' or en_word[0] == 'Z':
+            new_word.first_letter = 'XYZ'
+        else:
+            new_word.first_letter = en_word[0].upper()
+        # new_word.first_letter = alphbat
         new_word.english = en_word
         new_word.phonetic_symbol = sy_list[i]
         new_word.chinese = zh_list[i]
@@ -124,10 +129,29 @@ def replace_words_comma():
         if ',' in word.chinese:
             temp_zh = word.chinese
             print(temp_zh)
-            a = Word.objects.get(chinese=temp_zh)
+            a = Word.objects.get(id=word.id)
             a.chinese = temp_zh.replace(',', '，')
             a.save()
     print('所有单词替换结束，应该成功的吧')
+
+# 替换id>=5884的单词类型
+def replace_word_type():
+    # word_type = get_object_or_404(WordDbType, type_name='CET6')
+    # all_word = Word.objects.filter(id__gte=5884)
+    # for word in all_word:
+    #     a = Word.objects.get(id=word.id)
+    #     a.word_db_type = word_type
+    #     a.save()
+    a = Word.objects.get(id=7066)
+    a.english = 'thanksgiving'
+    a.first_letter = 'T'
+    a.save()
+    b = Word.objects.get(id=6278)
+    b.english = 'easter'
+    b.first_letter = 'E'
+    b.save()
+    print('所有单词替换结束，应该成功的吧')
+
 
 # 删除重复数据
 def del_repeat_data():

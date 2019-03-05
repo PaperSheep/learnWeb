@@ -7,19 +7,29 @@
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
     <body ondrop="stop_drop(event)">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
+              <div class="navbar-brand" style="color: green;">请把相应的中文拖放到矩形中</div>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <form id="overbtn" class="navbar-form navbar-right" action="{% url 'finished' %}" method="post" style="visibility: visible;">
+                    {% csrf_token %}
+                    <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
+                    <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
+                    <button type="submit" class="btn btn-success">学习结束</button>
+                </form>
+            </div><!--/.navbar-collapse -->
+          </div>
+        </nav>
         <div id='wordCount' hidden='true'>{{ english|length }}</div>
-        <form action="{% url 'finished' %}" method="post">
-            {% csrf_token %}
-            <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
-            <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
-            <button type="submit" class="btn btn-success">学习结束</button>
-        </form>
-        <a class="btn btn-primary btn-lg train-over" id="overbtn" href="{% url 'band_with_type' word_type.pk %}" style="visibility: hidden;">学习结束 &raquo;</a>
-        <h1 class="title">请把相应的中文拖放到矩形中：</h1>
-        <div id="background_en" class="bg_en">
-        </div>
-        <div id="background_zh" class="bg_zh">
-        </div>
+            <div class="Panel">
+                <div id="background_en" class="bg_en">
+                </div>
+                <div id="background_zh" class="bg_zh">
+                </div>
+            </div>
         <script type="text/javascript">
             var wordCount = 0;
             if (document.getElementById("wordCount")) {

@@ -4,6 +4,7 @@
 }
 span {
     font-size: 23px;
+    transition:0.3s ease;
 }
 .wordBoard{
     width: 1000px;
@@ -70,25 +71,28 @@ span {
     font-size: 23px;
     margin-left: 30px;
     border-radius: 10px;  /* 圆角属性*/
+    background: #fff;
 }
 .title {
     text-align: center;
 }
 .bg_en {
     float: left;
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: 700px;
     margin-left: 50px;
-    background: #FFFF99;
-    /*background: #ffffff;*/
+    margin-top: 10px;
+    /*background: #FFFF99;*/
+    background: #CCCCCC;
     border-radius: 20px;  /* 圆角属性*/
 }
 .bg_zh {
     float: left;
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: 700px;
     margin-left: 50px;
-    background: #FFCCFF;
+    margin-top: 10px;
+    /*background: #FFCCFF;*/
     /*background: #ffffff;*/
     border-radius: 20px;  /* 圆角属性*/
 }
@@ -96,5 +100,26 @@ span {
     float: top;
     margin: 20px 500px;
 }
+.Panel {
+    width: 1750px;
+    height: 820px;
+    margin: auto 100px;  /* 上下边距100左右自动*/
+    margin-top: 60px;
+    /*background: #d8d8bf;*/
+    background: #fff;
+    border-radius: 20px;  /* 圆角属性*/
+}
 /* train_three */
+/* review */
+.review {
+    color: #fff!important;
+    background-color: #fff!important;
+}
+body {
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
 
+/* review */

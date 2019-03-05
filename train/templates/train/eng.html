@@ -13,19 +13,20 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
+          <div class="navbar-brand" style="color: green;">请拼写选中的单词</div>
         </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form id="nextBtn" class="navbar-form navbar-right" hidden="true" action="{% url 'level_tow' %}" method="post">
+                {% csrf_token %}
+                <input id="en_word" type="text" name="en_word" value="" hidden="true">
+                <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
+                <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
+                <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
+                <button type="submit" class="btn btn-success">进行下阶段学习</button>
+            </form>
+        </div><!--/.navbar-collapse -->
       </div>
     </nav>
-    <div id="nextBtn" class="next-btn" hidden="true">
-        <form action="{% url 'level_tow' %}" method="post">
-            {% csrf_token %}
-            <input id="en_word" type="text" name="en_word" value="" hidden="true">
-            <input id="zh_word" type="text" name="zh_word" value="" hidden="true">
-            <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
-            <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
-            <button type="submit" class="btn btn-success">进行下阶段学习</button>
-        </form>
-    </div>
     <div class='wordBoard'>
         <div id='wordCount' hidden='true'>{{ words|length }}</div>
         <!-- <div id='word_type' hidden='true'>{{ word_type }}</div> -->

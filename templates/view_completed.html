@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
+        </div>
+      </div>
+    </nav>
+    <div class="jumbotron">
+        {% for key, value in percent_list.items %}
+          <div class="container">
+            <h3>{{ key }}:</h3>
+            {% if value.1 == 0 %}
+                <p><div id="panel{{ forloop.counter }}" class="btn btn-primary btn-lg"  role="button">未学习 &raquo; {{ value.1 }}/{{ value.2 }}</div></p>
+            {% else %}
+                <p><button id="panel{{ forloop.counter }}" class="btn btn-primary btn-lg"  role="button" onclick="showPanel(this)">显示已学单词 &raquo; {{ value.1 }}/{{ value.2 }}</button></p>
+                <p><iframe id="cpanel{{ forloop.counter }}" hidden="true" src="{% url 'view_content' value.0 %}" width="600" height="500" frameborder="1" scrolling="yes"></iframe></p>
+            {% endif %}
+          </div>
+        {% endfor %}
+    </div>
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+      function showPanel(obj) {
+        if ($("#c" + obj.id).is(":hidden")) {
+               $("#c" + obj.id).show();    //如果元素为隐藏,则将它显现
+        }
+        else {
+              $("#c" + obj.id).hide();     //如果元素为显现,则将其隐藏
+        }
+      }
+    </script>
+</body>
+</html>
