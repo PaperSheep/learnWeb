@@ -13,6 +13,8 @@ def test(request):
 def review_page(request, word_type_pk):
     word_type = get_object_or_404(WordDbType, pk=word_type_pk)
     user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type).order_by('mastery_level')  # 外键属性的筛选
+    if len(user_words) == 0:
+        pass
 
     context = {}
     context['word_type'] = word_type
