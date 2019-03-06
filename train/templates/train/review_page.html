@@ -19,6 +19,8 @@
             <form id="nextBtn" class="navbar-form navbar-right" hidden="true" action="{% url 'review_finished' %}" method="post">
                 <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
                 <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
+                <input id="deviation_list" type="text" name="deviation_list" hidden="true" value="">
+                <input id="is_tip" type="text" name="is_tip" hidden="true" value="">
                 <button type="submit" class="btn btn-success">复习完毕</button>
             </form>
         </div><!--/.navbar-collapse -->
@@ -40,6 +42,15 @@
     </div>
     <script type="text/javascript" src="{% static 'train/review.js' %}"></script>
     <script type="text/javascript">
+        var wordCount = 0;
+        var is_tip = [];  // 检测是否用到提示
+        if (document.getElementById("wordCount")) {
+            wordCount = Number(document.getElementById("wordCount").innerText);
+        }
+        for (var i = 0; i < wordCount; i++) {
+            is_tip.push('false');
+        }
+        document.getElementById("is_tip").value = is_tip;
         // 将后台数据转成数组
         var word_pk_temp = "{{ word_pk|safe }}";
         // 字符串替换以及字符串转数组
@@ -47,13 +58,16 @@
         document.getElementById("word_pk").value = word_pk;
         // 显示单词提示
         function showTip(obj) {
-            var letter_list = document.getElementsByClassName("letter" + obj.getAttribute("data-btnName"));
-            var completed_count = document.getElementById("finishCount" + obj.getAttribute("data-btnName")).innerHTML;
-            if (completed_count == '2') {
+            var anchory = obj.getAttribute("data-btnName");
+            var letter_list = document.getElementsByClassName("letter" + anchory);
+            var completed_count = document.getElementById("finishCount" + anchory).innerHTML;
+            if (completed_count == '2' && is_tip[parseInt(anchory) - 1] == "false") {
                 for (var j = 0,len = letter_list.length; j < len; j++) {
                     letter_list[j].style.color = "";
                     letter_list[j].style.backgroundColor = "";
                 }
+                is_tip[parseInt(anchory) - 1] = "true";
+                document.getElementById("is_tip").value = is_tip;
             }
         }
     </script>

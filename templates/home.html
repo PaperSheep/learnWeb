@@ -92,17 +92,6 @@
                   <a class="btn btn-success"  href="{% url 'word_train' key word_type.type_name %}">开始学习{{ key }}首字母单词</a>
                 {% endif %}
               {% endfor %}
-<!--               <div class="skillbar html">
-                <div class="filled" data-width="82.35%"></div>
-                <span class="title">A</span>
-                <span class="percent">80%</span>
-              </div>
-              <a class="btn btn-success"  href="{% url 'word_train' 'A' word_type.type_name %}">开始学习A首字母单词</a>
-              <div class="skillbar html">
-                <div class="filled" data-width="83%"></div>
-                <span class="title">A</span>
-                <span class="percent">80%</span>
-              </div> -->
             </div>
           </div>
         {% else %}
@@ -122,7 +111,11 @@
         <div class="col-md-4">
           <h2>复习已学单词</h2>
           <p>对已经学习过的新单词进行抗遗忘复习. </p>
-          <p><a class="btn btn-default" href="{% url 'review_page' word_type.pk %}" role="button">点击进入 &raquo;</a></p>
+          {% if review_error == '未学习新单词' %}
+            <p><div class="btn btn-default" role="button">{{ review_error }}</div></p>
+          {% else %}
+            <p><a class="btn btn-default" href="{% url 'review_page' word_type.pk %}" role="button">点击进入 &raquo;</a></p>
+          {% endif %}
         </div>
         <div class="col-md-4">
           <h2>限时测试</h2>

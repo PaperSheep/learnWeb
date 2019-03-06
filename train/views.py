@@ -3,18 +3,29 @@ from .models import WordDbType, Word, UserWord
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import random
+import django.utils.timezone as timezone
 # import json
 
 def test(request):
     context = {}
     return render_to_response('view_completed.html', context)
 
+
 @login_required(login_url='home')
 def review_page(request, word_type_pk):
     word_type = get_object_or_404(WordDbType, pk=word_type_pk)
-    user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type).order_by('mastery_level')  # 外键属性的筛选
+    # user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type).order_by('mastery_level')  # 外键属性的筛选
+    user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type)
     if len(user_words) == 0:
-        pass
+        return redirect('band_with_type', word_type.pk)
+    for word in user_words:
+        # word.review_time = word.review_time.replace(tzinfo=None)  # 清空时区信息
+        delta_hours = (timezone.now() - word.review_time).total_seconds() / 3600
+        # 复习次数小于五次执行遗忘曲线
+        if delta_hours > 1 and word.review_count < 5:
+            word.mastery_level /= delta_hours  # 遗忘曲线
+            word.save()
+    user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type).order_by('mastery_level')
 
     context = {}
     context['word_type'] = word_type
@@ -89,21 +100,41 @@ def level_three(request):
 def finished(request):
     word_pk_list = request.POST['word_pk'].split(',')
     word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
-    for word_pk in word_pk_list:
-        word_model = get_object_or_404(Word, pk=int(word_pk))
-        new_word = UserWord()
-        new_word.player = request.user
-        new_word.english = word_model
-        new_word.save()
+    user_db_word = UserWord.objects.filter(player=request.user, english__pk__in=word_pk_list)
+    # 排除重复提交表单
+    if len(user_db_word) == 0:
+        for word_pk in word_pk_list:
+            word_model = get_object_or_404(Word, pk=int(word_pk))
+            new_word = UserWord()
+            new_word.player = request.user
+            new_word.english = word_model
+            new_word.save()
     return redirect('band_with_type', word_type.pk)
 
 # 复习完之后更新存储数据
 @login_required(login_url='home')
 def review_finished(request):
     word_pk_list = request.POST['word_pk'].split(',')
+    deviation_list = request.POST['deviation_list'].split(',')
+    is_tip_list = request.POST['is_tip'].split(',')
+    # data_tup = (word_pk_list, deviation_list, is_tip_list)
+    print(deviation_list)
+    print(is_tip_list)
     word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
-    for word_pk in word_pk_list:
+    for i, word_pk in enumerate(word_pk_list):
         user_word = UserWord.objects.get(pk=int(word_pk))
-        user_word.mastery_level += 5
+        if is_tip_list[i] == 'true':
+            user_word.mastery_level -= 10
+        else:
+            is_positive = int(deviation_list[i])
+            if is_positive > 0:
+                user_word.review_count += 1
+            user_word.mastery_level += is_positive
+            # 掌握值界限[0，100]
+            if user_word.mastery_level < 0:
+                user_word.mastery_level = 0
+            elif user_word.mastery_level > 100:
+                user_word.mastery_level = 100
+
         user_word.save()
     return redirect('band_with_type', word_type.pk)

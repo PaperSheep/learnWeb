@@ -13,6 +13,11 @@ def list_data(word_type, context):
         user_word = UserWord.objects.filter(player=context['user'], english__in=word_list)
         if word_list.count() != 0:
             percent_list[letter['first_letter']] = round(round(user_word.count() / word_list.count(), 2) * 100)
+        user_words = UserWord.objects.filter(player=context['user'], english__word_db_type=word_type)
+        if len(user_words) == 0:
+            context['review_error'] = '未学习新单词'
+        else:
+            context['review_error'] = ''
     context['percent_list'] = percent_list
 
 # 默认主页
@@ -85,6 +90,10 @@ def band_with_type(request, word_type_pk):
     context['user'] = request.user
     list_data(word_type, context)
     return render_to_response('home.html', context)
+
+# 用户词库去重
+def duplicate_removal():
+    user_db_word = UserWord.objects.all()
 
 # 查看已经学习的单词页面
 @login_required(login_url='home')

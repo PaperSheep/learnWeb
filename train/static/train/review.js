@@ -4,6 +4,7 @@ var anchorc = 1;  // 单词坐标
 var wordCount = 0;
 var finish_count = 0;  // 单词完成次数
 var count_index = 0;  // 控制动画的索引
+var deviation_list = [];  // 单词偏差值列表
 if (document.getElementById("nextBtn")) {
     document.getElementById("nextBtn").hidden = false;  // 显示下一页面按钮
 }
@@ -67,6 +68,7 @@ function ChangeWord(ev){
                         document.getElementById("finishCount" + anchory).innerHTML = 3;
                         document.getElementById("W" + anchorx + anchory).dataset.finish = "true";
                         anchory += 1;
+                        document.getElementById("deviation_list").value = deviation_list;  // 提交偏差值列表  // 测试位置
                         var isLast = document.getElementById("W" + anchorx + (anchory-1)).getAttribute("data-last");
                         if (isLast != "true") {
                             document.getElementsByClassName("selectWord")[0].classList.remove("selectWord");  // 去掉某一类
@@ -74,6 +76,7 @@ function ChangeWord(ev){
                         }
                         else {
                             isAllFinish = true;  // 全部结束
+                            document.getElementById("deviation_list").value = deviation_list;  // 提交偏差值列表  // 真正位置
                             if (document.getElementById("nextBtn")) {
                                 document.getElementById("nextBtn").hidden = false;  // 显示下一页面按钮
                             }
@@ -87,6 +90,23 @@ function ChangeWord(ev){
             ////
             anchorc += 1;  // 锚点移一位
         }
+        else {
+            if (finish_count == 2) {
+                var letter_list = document.getElementsByClassName("letter" + anchory);
+                for (var j = 0,len = letter_list.length; j < len; j++) {
+                    letter_list[j].classList.remove("inputTrue"); 
+                    letter_list[j].style.color = "#fff";
+                    letter_list[j].style.backgroundColor = "#fff";
+                }
+                if (deviation_list[anchory - 1] == 10 || deviation_list[anchory - 1] == -5) {
+                    deviation_list[anchory - 1] -= 5;
+                }
+                else if (deviation_list[anchory - 1] == 5) {
+                    deviation_list[anchory - 1] = -5;
+                }
+                anchorc = 1;  // 字母锚点初始化
+            } 
+        } 
     }
     else
     {
@@ -96,6 +116,10 @@ function ChangeWord(ev){
 // 初始化函数
 function Init(){
     document.getElementById("W11").className += " selectWord";
+    for (var i = 0; i < wordCount; i++) {
+        deviation_list.push(10);
+    }
+    document.getElementById("deviation_list").value = deviation_list;  // 测试位置
 }
 // 页面加载
 window.onload = function(){
