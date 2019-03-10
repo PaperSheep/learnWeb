@@ -80,7 +80,7 @@
         {% if user.is_authenticated %}
           <div class="container" hidden="true" id="panel">
             <div id="skill">
-              {% for key, value in percent_list %}
+              {% for key, value in percent_list.items %}
                 <div class="skillbar {{ key }}">
                   <div class="filled" data-width="{{ value }}%"></div>
                   <span class="title">{{ key }}</span>

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
+
 # 返回列表数据
 def list_data(word_type, context):
     first_letter_list = Word.objects.values('first_letter').distinct().order_by('first_letter')  # 去重，再排序
@@ -14,11 +15,12 @@ def list_data(word_type, context):
         if word_list.count() != 0:
             percent_list[letter['first_letter']] = round(round(user_word.count() / word_list.count(), 2) * 100)
         user_words = UserWord.objects.filter(player=context['user'], english__word_db_type=word_type)
-        if len(user_words) == 0:
+        if user_words.count() == 0:
             context['review_error'] = '未学习新单词'
         else:
             context['review_error'] = ''
-    context['percent_list'] = percent_list
+    context['percent_list'] = sorted(percent_list.items(),key=lambda x:x[0])
+    # print(context['percent_list'])
 
 # 默认主页
 def home(request):

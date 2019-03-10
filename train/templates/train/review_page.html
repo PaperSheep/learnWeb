@@ -13,7 +13,7 @@
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
-          <div class="navbar-brand" style="color: green;">请拼写选中的单词</div>
+          <div class="navbar-brand" style="color: green;">请拼写选中的单词(输入第三次时，系统会记录犯错偏差值以及是否使用提示，请尽量减少输错次数)</div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <form id="nextBtn" class="navbar-form navbar-right" hidden="true" action="{% url 'review_finished' %}" method="post">

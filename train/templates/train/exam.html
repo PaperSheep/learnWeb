@@ -3,7 +3,6 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>训练学习第3阶段</title>
         <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
@@ -12,14 +11,18 @@
           <div class="container">
             <div class="navbar-header">
               <a class="navbar-brand" href="{% url 'band_with_type' word_type.pk %}">返回主页</a>
-              <div class="navbar-brand" style="color: green;">请把相应的中文拖放到矩形中</div>
+              <div id="scoreTip" class="navbar-brand" style="color: green; visibility: hidden;">正确数(<span id="score">5</span>/{{ english|length }})</div>
+              <div id="tip" class="navbar-brand" style="color: green; visibility: visible;">请把相应的中文拖放到矩形中(只能拖动一次)</div>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-                <form id="overbtn" class="navbar-form navbar-right" action="{% url 'finished' %}" method="post" style="visibility: hidden;">
-                    {% csrf_token %}
+                <div id="overbtn1" class="navbar-form navbar-right" style="visibility: visible;">
+                    <button type="submit" class="btn btn-success" onclick="calculateScore()">查看得分</button>
+                </div>
+                <form id="overbtn2" class="navbar-form navbar-right" action="{% url 'exam_finished' %}" method="POST" style="visibility: hidden;">
                     <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
                     <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
-                    <button type="submit" class="btn btn-success">学习结束</button>
+                    <input id="true_list" type="text" name="true_list" value="" hidden="true">
+                    <button type="submit" class="btn btn-success">测验结束</button>
                 </form>
             </div><!--/.navbar-collapse -->
           </div>
@@ -31,10 +34,15 @@
                 <div id="background_zh" class="bg_zh">
                 </div>
             </div>
+        <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
         <script type="text/javascript">
             var wordCount = 0;
             if (document.getElementById("wordCount")) {
                 wordCount = Number(document.getElementById("wordCount").innerText);
+            }
+            var is_true = [];  // 检测是否用到提示
+            for (var i = 0; i < wordCount; i++) {
+                is_true.push('false');
             }
             // 将后台数据转成数组
             var english_temp = "{{ english|safe }}";
@@ -103,9 +111,10 @@
                 ev.dataTransfer.setData("Text", ev.target.id);
             }
             function checkOver() {
-                if (document.getElementsByClassName("inputTrue").length == wordCount) {
-                    overbtn.style.visibility = "visible";
-                }
+                overbtn1.style.visibility = "hidden";
+                tip.style.visibility = "hidden";
+                overbtn2.style.visibility = "visible";
+                scoreTip.style.visibility = "visible";
             }
             // 有拖动事件在某标签上面的时候触发
             function drop(ev) {
@@ -113,17 +122,36 @@
                 var data = ev.dataTransfer.getData("Text");  // 把存有拖拽的标签的id的值的Text赋值给data
                 ev.target.appendChild(document.getElementById(data));  // 通过id定位到拖拽标签，然后把该拖拽标签设置为当前接受拖拽标签的标签的子标签
                 var current_id = ev.target.id;
+                document.getElementById(data).draggable = false;  // 禁止标签拖动
+                document.getElementById(current_id).ondrop = "stop_drop(event)";  // 加入禁止拖动函数
+                // 验证是否拖入正确
                 if(data.substring(data.length - 1, data.length) == current_id.substring(current_id.length - 1, current_id.length)) {
+                    // 末尾id数1~9
                     if (document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length))) {
-                        document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "inputTrue";
+                        document.getElementById("word_en_" + current_id.substring(current_id.length - 1, current_id.length)).className = "wordTrue";
                     }
+                    // 末尾id数10
                     else {
-                        document.getElementById("word_en_" + wordCount).className = "inputTrue";
+                        document.getElementById("word_en_" + wordCount).className = "wordTrue";
                     }
-                    document.getElementById(data).draggable = false;
-                    document.getElementById(current_id).ondrop = "stop_drop(event)";
-                    checkOver();  // 检测是否全部拖入
+                    // document.getElementById(data).draggable = false;
+                    // document.getElementById(current_id).ondrop = "stop_drop(event)";  // 加入禁止拖动函数
+                    // checkOver();  // 检测是否全部拖入
                 }
+            }
+            // 计算得分
+            function calculateScore() {
+                var score = $(".wordTrue").length;  // 获取正确单词个数
+                $("#score").html(score);  // 显示正确个数
+                $(".en_word").attr("class", "word_error");  // 替换类名
+                $(".wordTrue").attr("class", "inputTrue");  // 替换类名
+                checkOver();
+                // 获取正确的单词
+                $(".inputTrue").each(function(){
+                    var id_value = $(this).attr("id");
+                    is_true[parseInt(id_value.replace(/word_en_/g, '')) - 1] = 'true';
+                });
+                document.getElementById("true_list").value = is_true;
             }
             start();
         </script>

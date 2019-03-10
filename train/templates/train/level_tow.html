@@ -2,11 +2,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>带关闭按钮的浮动窗口</title>
+        <title>训练学习第2阶段</title>
         <link rel="stylesheet" type="text/css" href="{% static 'train/train.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
     </head>
     <body>
+        <p id="content_en" hidden="true"></p>
         <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container">
             <div class="navbar-header">
@@ -49,7 +50,7 @@
             for (var i = 0; i < wordCount; i++) {
                 words_id.push("W1" + (i+1));
             }
-            // document.getElementById("content_en").innerHTML = english;
+            document.getElementById("content_en").innerHTML = english;
             // document.getElementById("content_zh").innerHTML = chinese;
             // document.getElementById("content_body").innerHTML = "<div id='img2' style='position: absolute; left: 211; top: 300;visibility :hidden;' align='middle'><div class='fdck'>这是新建的</div></div>"
             // var pause = true;
@@ -132,7 +133,7 @@
                 // 生成单词卡标签
                 var inner_text = "";
                 for (var i = 0; i < wordCount; i++) {
-                    if (i != 9) {
+                    if (i != wordCount - 1) {
                         inner_text += str_temp.replace(/\[ID_NUM\]/g, words_id[i]).replace(/\[CONTENTEN\]/g, show_en_list[i]).replace(/\[CONTENTZH\]/g, chinese[i]).replace(/\[LAST_VALUE\]/g, "false");
                     }
                     else {

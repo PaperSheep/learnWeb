@@ -121,5 +121,10 @@ body {
     -ms-user-select:none;
     user-select:none;
 }
-
 /* review */
+/* exam */
+.word_error {
+    color: red;
+}
+/* exam */
+

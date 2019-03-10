@@ -4,11 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import random
 import django.utils.timezone as timezone
-# import json
 
-def test(request):
-    context = {}
-    return render_to_response('view_completed.html', context)
 
 
 @login_required(login_url='home')
@@ -20,10 +16,11 @@ def review_page(request, word_type_pk):
         return redirect('band_with_type', word_type.pk)
     for word in user_words:
         # word.review_time = word.review_time.replace(tzinfo=None)  # 清空时区信息
-        delta_hours = (timezone.now() - word.review_time).total_seconds() / 3600
+        delta_hours = round((timezone.now() - word.review_time).total_seconds() / 3600, 2)
         # 复习次数小于五次执行遗忘曲线
         if delta_hours > 1 and word.review_count < 5:
             word.mastery_level /= delta_hours  # 遗忘曲线
+            word.review_time = timezone.now()
             word.save()
     user_words = UserWord.objects.filter(player=request.user, english__word_db_type=word_type).order_by('mastery_level')
 
@@ -72,28 +69,54 @@ def word_train(request, first_letter, word_type_type_name):
 
 @login_required(login_url='home')
 def level_tow(request):
-    word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
+    try:
+        word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
 
+        context = {}
+        # print(request.POST['en_word'])
+        context['english'] = request.POST['en_word'].split(',')
+        context['chinese'] = request.POST['zh_word'].split(',')
+        context['word_pk'] = request.POST['word_pk'].split(',')
+        context['word_type'] = word_type
+        return render_to_response('train/level_tow.html', context)
+    except:
+        return redirect('home')
+
+@login_required(login_url='home')
+def exam(request, word_type_pk):
+    word_type = get_object_or_404(WordDbType, pk=word_type_pk)
+    user_db_word = list(UserWord.objects.filter(player=request.user, english__word_db_type=word_type))
     context = {}
-    # print(request.POST['en_word'])
-    context['english'] = request.POST['en_word'].split(',')
-    context['chinese'] = request.POST['zh_word'].split(',')
-    context['word_pk'] = request.POST['word_pk'].split(',')
+
+    words = []
+    context['english'] = []
+    context['chinese'] = []
+    context['word_pk'] = []
+    for i in range(0, 10):
+        words.append(random.choice(user_db_word))
+        user_db_word.remove(words[i])
+    for word in words:
+        context['english'].append(word.english.english)
+        context['chinese'].append(word.english.chinese)
+        context['word_pk'].append(word.pk)
     context['word_type'] = word_type
-    return render_to_response('train/level_tow.html', context)
+    return render_to_response('train/exam.html', context)
 
 @login_required(login_url='home')
 def level_three(request):
-    word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
+    try:
+        word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
 
-    context = {}
-    context['english'] = request.POST['en_word'].split(',')
-    context['chinese'] = request.POST['zh_word'].split(',')
-    context['word_pk'] = request.POST['word_pk'].split(',')
-    context['word_type'] = word_type
-    # print(context['english'])
-    # print(context['chinese'])
-    return render_to_response('train/level_three.html', context)
+        context = {}
+        context['english'] = request.POST['en_word'].split(',')
+        context['chinese'] = request.POST['zh_word'].split(',')
+        context['word_pk'] = request.POST['word_pk'].split(',')
+        context['word_type'] = word_type
+        # print(context['english'])
+        # print(context['chinese'])
+        return render_to_response('train/level_three.html', context)
+    except:
+        return redirect('home')
 
 # 学习完之后的存储数据
 @login_required(login_url='home')
@@ -118,8 +141,7 @@ def review_finished(request):
     deviation_list = request.POST['deviation_list'].split(',')
     is_tip_list = request.POST['is_tip'].split(',')
     # data_tup = (word_pk_list, deviation_list, is_tip_list)
-    print(deviation_list)
-    print(is_tip_list)
+
     word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
     for i, word_pk in enumerate(word_pk_list):
         user_word = UserWord.objects.get(pk=int(word_pk))
@@ -135,6 +157,32 @@ def review_finished(request):
                 user_word.mastery_level = 0
             elif user_word.mastery_level > 100:
                 user_word.mastery_level = 100
-
+        user_word.review_time = timezone.now()  # 更新单词复习时间
         user_word.save()
     return redirect('band_with_type', word_type.pk)
+
+# 测验完之后更新存储数据
+@login_required(login_url='home')
+def exam_finished(request):
+    word_pk_list = request.POST['word_pk'].split(',')
+    true_list = request.POST['true_list'].split(',')
+    word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
+    for i, value in enumerate(true_list):
+        user_word = UserWord.objects.get(pk=int(word_pk_list[i]))
+        if value == 'true':
+            user_word.mastery_level += 5
+            user_word.review_time = timezone.now()  # 更新单词复习时间
+        else:
+            user_word.mastery_level -= 5
+        # 掌握值界限[0，100]
+        if user_word.mastery_level < 0:
+            user_word.mastery_level = 0
+        elif user_word.mastery_level > 100:
+            user_word.mastery_level = 100
+        user_word.save()
+
+    return redirect('band_with_type', word_type.pk)
+
+#404方法
+def page_not_found(request):
+    return render_to_response('404.html')
