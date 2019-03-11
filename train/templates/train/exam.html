@@ -19,6 +19,7 @@
                     <button type="submit" class="btn btn-success" onclick="calculateScore()">查看得分</button>
                 </div>
                 <form id="overbtn2" class="navbar-form navbar-right" action="{% url 'exam_finished' %}" method="POST" style="visibility: hidden;">
+                    {% csrf_token %}
                     <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
                     <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
                     <input id="true_list" type="text" name="true_list" value="" hidden="true">

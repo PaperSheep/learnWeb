@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect, render, HttpResponse
 from .models import WordDbType, Word, UserWord
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -30,7 +30,8 @@ def review_page(request, word_type_pk):
     context['word_pk'] = []
     for word in context['words']:
         context['word_pk'].append(word.pk)
-    return render_to_response('train/review_page.html', context)
+    # return render_to_response('train/review_page.html', context)
+    return render(request, 'train/review_page.html', context)
 
 @login_required(login_url='home')
 def word_train(request, first_letter, word_type_type_name):
@@ -65,7 +66,8 @@ def word_train(request, first_letter, word_type_type_name):
         context['chinese'].append(word.chinese)
         context['word_pk'].append(word.pk)
     # print(context['english'])
-    return render_to_response('train/eng.html', context)
+    # return render_to_response('train/eng.html', context)
+    return render(request, 'train/eng.html', context)
 
 @login_required(login_url='home')
 def level_tow(request):
@@ -78,7 +80,8 @@ def level_tow(request):
         context['chinese'] = request.POST['zh_word'].split(',')
         context['word_pk'] = request.POST['word_pk'].split(',')
         context['word_type'] = word_type
-        return render_to_response('train/level_tow.html', context)
+        # return render_to_response('train/level_tow.html', context)
+        return render(request, 'train/level_tow.html', context)
     except:
         return redirect('home')
 
@@ -100,7 +103,8 @@ def exam(request, word_type_pk):
         context['chinese'].append(word.english.chinese)
         context['word_pk'].append(word.pk)
     context['word_type'] = word_type
-    return render_to_response('train/exam.html', context)
+    # return render_to_response('train/exam.html', context)
+    return render(request, 'train/exam.html', context)
 
 @login_required(login_url='home')
 def level_three(request):
@@ -114,7 +118,8 @@ def level_three(request):
         context['word_type'] = word_type
         # print(context['english'])
         # print(context['chinese'])
-        return render_to_response('train/level_three.html', context)
+        # return render_to_response('train/level_three.html', context)
+        return render(request, 'train/level_three.html', context)
     except:
         return redirect('home')
 
@@ -184,5 +189,10 @@ def exam_finished(request):
     return redirect('band_with_type', word_type.pk)
 
 #404方法
-def page_not_found(request):
-    return render_to_response('404.html')
+def upload_file(request):
+    print("FILES:", request.FILES)
+    print("POST:", request.POST)
+    return HttpResponse("上传成功!")
+
+def test(request):
+    return render(request, 'train/test.html')

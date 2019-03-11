@@ -17,6 +17,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <form id="nextBtn" class="navbar-form navbar-right" hidden="true" action="{% url 'review_finished' %}" method="post">
+                {% csrf_token %}
                 <input id="word_pk" type="text" name="word_pk" value="" hidden="true">
                 <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
                 <input id="deviation_list" type="text" name="deviation_list" hidden="true" value="">

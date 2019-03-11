@@ -18,11 +18,15 @@
     <div class="container">
 
       <form class="form-signin" action="" method="POST">
+        {% csrf_token %}
         <h2 class="form-signin-heading">注册</h2>
+        <p>用户名:</p>
         <label for="inputEmail" class="sr-only">用户名:</label>
         <input type="text" name="username" id="id_username" class="form-control" placeholder="用户名" required autofocus>
+        <p>密码</p>
         <label for="inputPassword" class="sr-only">密码:</label>
         <input type="password" name="password1" id="id_password1" class="form-control" placeholder="密码" required>
+        <p>确认密码</p>
         <label for="inputPassword" class="sr-only">确认密码:</label>
         <input type="password" name="password2" id="id_password2" class="form-control" placeholder="确认密码" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>

@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect, render
 from train.models import WordDbType, Word, UserWord
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -36,21 +36,25 @@ def home(request):
         user = authenticate(request, username=request.POST['用户名'], password=request.POST['密码'])
         if user is None:
             context['error'] = '用户名或密码错误'
-            return render_to_response('home.html', context)
+            # return render_to_response('home.html', context)
+            # return render(request, 'home.html', context)
         else:
             context['user'] = user
             login(request, user)
             # context['error'] = ''
             list_data(word_type, context)
-            return render_to_response('home.html', context)
+            # return render_to_response('home.html', context)
+            # return render(request, 'home.html', context)
     else:
         if request.user.is_authenticated:
             context['user'] = request.user
             list_data(word_type, context)
-            return render_to_response('home.html', context)
+            # return render_to_response('home.html', context)
+            # return render(request, 'home.html', context)
         else:
             context['error'] = '未登录'
-            return render_to_response('home.html', context)
+            # return render_to_response('home.html', context)
+    return render(request, 'home.html', context)
 
 # 退出登录
 def user_out(request):
@@ -72,12 +76,14 @@ def register(request):
             context['word_db_type'] = word_db_type
             context['word_type'] = word_type
             context['error'] = ''
-            return render_to_response('home.html', context)
+            # return render_to_response('home.html', context)
+            return render(request, 'home.html', context)
             # return redirect('home', context)
     else:
         context['register_form'] = UserCreationForm()
     print(context['register_form'].errors)
-    return render_to_response('register.html', context)
+    # return render_to_response('register.html', context)
+    return render(request, 'register.html', context)
 
 # 选择词库的主页
 @login_required(login_url='home')
@@ -91,7 +97,8 @@ def band_with_type(request, word_type_pk):
     # context['already'] = 'yes'
     context['user'] = request.user
     list_data(word_type, context)
-    return render_to_response('home.html', context)
+    # return render_to_response('home.html', context)
+    return render(request, 'home.html', context)
 
 # 用户词库去重
 def duplicate_removal():
@@ -113,7 +120,8 @@ def view_page(request, word_type_pk):
     context['word_type'] = word_type
     # context['word_db_type'] = word_db_type
     context['percent_list'] = percent_list
-    return render_to_response('view_completed.html', context)
+    # return render_to_response('view_completed.html', context)
+    return render(request, 'view_completed.html', context)
 
 # 查看已经学习的单词内容
 @login_required(login_url='home')
@@ -124,4 +132,5 @@ def view_content(request, word_type_pk):
     
     context = {}
     context['user_word'] = user_word
-    return render_to_response('view_content.html', context)
+    # return render_to_response('view_content.html', context)
+    return render(request, 'view_content.html', context)

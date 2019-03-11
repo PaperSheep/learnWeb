@@ -50,6 +50,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           {% if user.is_authenticated %}
             <form class="navbar-form navbar-right" action="{% url 'user_out' %}" method="GET">
+              {% csrf_token %}
               <a type="submit" class="btn btn-success" href="#">当前用户：{{ user.username }}</a>
               <button type="submit" class="btn btn-success">退出登录</button>
             </form>

@@ -11,6 +11,8 @@ urlpatterns = [
     path('level_three/', views.level_three, name='level_three'),
     path('review/<int:word_type_pk>', views.review_page, name='review_page'),  # 复习页面
     path('exam/<int:word_type_pk>', views.exam, name='exam'),  # 测试
+    path('test/', views.test, name='test'),
+    path('upload_file/', views.upload_file, name='upload_file'),
 ]
 
 

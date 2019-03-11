@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+</head>
+<body>
+    <h3>Ajax上传文件</h3>
+
+    <p><input type="text" name="username" id="username" placeholder="username"></p>
+    <p><input type="file" name="upload_file_ajax" id="upload_file_ajax"></p>
+
+    <button id="upload_button">提交</button>
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script>
+        $("#upload_button").click(function(){
+
+            var username = $("#username").val();
+            var upload_file = $("#upload_file_ajax")[0].files[0];
+
+            var formData = new FormData();
+            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}"); //必须写在模板中，才会被渲染)
+            formData.append("username", username);
+            formData.append("upload_file_ajax", upload_file);
+
+
+            $.ajax({
+                url : "{% url 'upload_file' %}",
+                type : "POST",
+                data : formData,
+                contentType : false,
+                processData : false,
+
+                success:function(){
+                    alert("上传成功!")
+                }
+            });
+
+
+        })
+    </script>
+</body>
+</html>
