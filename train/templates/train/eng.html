@@ -24,6 +24,9 @@
                 <input id='word_type' type="text" name="word_type" value="{{ word_type }}" hidden="true">
                 <button type="submit" class="btn btn-success">进行下阶段学习</button>
             </form>
+            <div class="navbar-form navbar-right">
+                <button id="upload_button" type="submit" class="btn btn-success">进行下阶段学习</button>
+            </div>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
@@ -41,22 +44,36 @@
             </div>
         {% endfor %}
     </div>
+    <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'train/train.js' %}"></script>
     <script type="text/javascript">
-        function start() {
-            // 将后台数据转成数组
-            var english_temp = "{{ english|safe }}";
-            var chinese_temp = "{{ chinese|safe }}";
-            var word_pk_temp = "{{ word_pk|safe }}";
-            // 字符串替换以及字符串转数组
-            var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
-            var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
-            var word_pk = word_pk_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
-            document.getElementById("en_word").value = english;
-            document.getElementById("zh_word").value = chinese;
-            document.getElementById("word_pk").value = word_pk;
-        }
-        start();
+        // 将后台数据转成数组
+        var english_temp = "{{ english|safe }}";
+        var chinese_temp = "{{ chinese|safe }}";
+        var word_pk_temp = "{{ word_pk|safe }}";
+        // 字符串替换以及字符串转数组
+        var english = english_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+        var chinese = chinese_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+        var word_pk = word_pk_temp.replace(/\[/g, '').replace(/\]/g, '').replace(/'/g, '').replace(/ /g, '').split(',');
+        document.getElementById("en_word").value = english;
+        document.getElementById("zh_word").value = chinese;
+        document.getElementById("word_pk").value = word_pk;
+        $("#upload_button").click(function(){
+            var formData = new FormData();
+            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}"); //必须写在模板中，才会被渲染)
+            formData.append("en_word", english);
+            formData.append("zh_word", chinese);
+            formData.append("word_pk", word_pk);
+            formData.append("word_type", "{{ word_type }}");
+
+            $.ajax({
+                url : "{% url 'level_tow' %}",
+                type : "POST",
+                data : formData,
+                contentType : false,
+                processData : false,
+            });
+        })
     </script>
 </body>
 </html>

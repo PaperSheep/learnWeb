@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import random
 import django.utils.timezone as timezone
+from django.http import JsonResponse  # 返回json格式数据
 
 
 
@@ -55,7 +56,6 @@ def word_train(request, first_letter, word_type_type_name):
         return redirect('band_with_type', word_type.pk)
 
     context = {}
-    # context['words'] = Word.objects.all()[:10]
     context['english'] = []
     context['chinese'] = []
     context['word_pk'] = []
@@ -65,12 +65,12 @@ def word_train(request, first_letter, word_type_type_name):
         context['english'].append(word.english)
         context['chinese'].append(word.chinese)
         context['word_pk'].append(word.pk)
-    # print(context['english'])
-    # return render_to_response('train/eng.html', context)
+
     return render(request, 'train/eng.html', context)
 
 @login_required(login_url='home')
 def level_tow(request):
+    print(1)
     try:
         word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
 
@@ -81,9 +81,12 @@ def level_tow(request):
         context['word_pk'] = request.POST['word_pk'].split(',')
         context['word_type'] = word_type
         # return render_to_response('train/level_tow.html', context)
+        print(2)
         return render(request, 'train/level_tow.html', context)
     except:
+        print(3)
         return redirect('home')
+    print(4)
 
 @login_required(login_url='home')
 def exam(request, word_type_pk):
@@ -188,11 +191,19 @@ def exam_finished(request):
 
     return redirect('band_with_type', word_type.pk)
 
-#404方法
+
 def upload_file(request):
-    print("FILES:", request.FILES)
-    print("POST:", request.POST)
-    return HttpResponse("上传成功!")
+    # print("FILES:", request.FILES)
+    # print("POST:", request.POST)
+    # print(request.POST['1'])
+    # print(request.POST['2'])
+    # print(type(request.POST['2']))
+    # return HttpResponse("上传成功!")
+    context = {
+                "data1": Word.objects.all()[0].chinese,
+               "data2": Word.objects.all()[0].english,
+   }
+    return JsonResponse(context)
 
 def test(request):
     return render(request, 'train/test.html')
