@@ -16,9 +16,9 @@
       </div>
     </nav>
     <div class="container">
-
+        <button id="btntest">hiha</button>
       <form class="form-signin" action="" method="POST">
-        {% csrf_token %}
+        <h3 id="test">123</h3>
         <h2 class="form-signin-heading">注册</h2>
         <p>用户名:</p>
         <label for="inputEmail" class="sr-only">用户名:</label>
@@ -37,6 +37,13 @@
     </div> <!-- /container -->
     <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/test.js' %}"></script>
+    <script type="text/javascript">
+        $("#btntest").click(function(){
+            document.getElementById("test").innerText = "{{ csrf_token }}";
+
+        })
+    </script>
 </body>
 </html>
 
