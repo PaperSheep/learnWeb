@@ -134,3 +134,13 @@ def view_content(request, word_type_pk):
     context['user_word'] = user_word
     # return render_to_response('view_content.html', context)
     return render(request, 'view_content.html', context)
+
+# def test(request):
+
+#     context = {}
+#     return render(request, 'test.html', context)
+
+# def sad(request):
+
+#     context = {}
+#     return render(request, 'My Lady.html', context)

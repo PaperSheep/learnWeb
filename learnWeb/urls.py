@@ -26,4 +26,6 @@ urlpatterns = [
     path('band/<int:word_type_pk>', views.band_with_type, name='band_with_type'),  # 选择词库
     path('view/<int:word_type_pk>', views.view_page, name='view_page'),  # 查看已学完单词的页面
     path('content/<int:word_type_pk>', views.view_content, name='view_content'),  # 查看已学完单词的内容
+    # path('test/', views.test, name='test'),  # 测试
+    # path('sad/', views.sad, name='sad'),  # 说不出话
 ]

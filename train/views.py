@@ -70,7 +70,6 @@ def word_train(request, first_letter, word_type_type_name):
 
 @login_required(login_url='home')
 def level_tow(request):
-    print(1)
     try:
         word_type = get_object_or_404(WordDbType, type_name=request.POST['word_type'])
 
@@ -81,12 +80,9 @@ def level_tow(request):
         context['word_pk'] = request.POST['word_pk'].split(',')
         context['word_type'] = word_type
         # return render_to_response('train/level_tow.html', context)
-        print(2)
         return render(request, 'train/level_tow.html', context)
     except:
-        print(3)
         return redirect('home')
-    print(4)
 
 @login_required(login_url='home')
 def exam(request, word_type_pk):
@@ -191,19 +187,11 @@ def exam_finished(request):
 
     return redirect('band_with_type', word_type.pk)
 
+# def test(request):
+#     return render(request, 'train/test.html')
 
-def upload_file(request):
-    # print("FILES:", request.FILES)
-    # print("POST:", request.POST)
-    # print(request.POST['1'])
-    # print(request.POST['2'])
-    # print(type(request.POST['2']))
-    # return HttpResponse("上传成功!")
-    context = {
-                "data1": Word.objects.all()[0].chinese,
-               "data2": Word.objects.all()[0].english,
-   }
-    return JsonResponse(context)
+# def test2(request):
 
-def test(request):
-    return render(request, 'train/test.html')
+#     context = {}
+#     context['word_type_pk'] = 1
+#     return JsonResponse(context)

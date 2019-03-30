@@ -77,7 +77,10 @@
       <div class="container">
         <h1>学习新词!</h1>
         <p>按照你所选的首字母来学习新单词.</p>
-        <p><button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal" onclick="showPanel()">开始吧 &raquo;</button></p>
+        <p>
+          <button class="btn btn-primary btn-lg"  role="button"  data-toggle="modal" data-target="#myModal" onclick="showPanel()">开始吧 &raquo;
+          </button>
+        </p>
         {% if user.is_authenticated %}
           <div class="container" hidden="true" id="panel">
             <div id="skill">
@@ -129,9 +132,7 @@
         </div>
       </div>
     </div> <!-- /container -->
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+
     <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'an-skill-bar.js' %}"></script>
@@ -139,10 +140,10 @@
     <script type="text/javascript">
       function showPanel() {
         if ($("#panel").is(":hidden")) {
-               $("#panel").show();    //如果元素为隐藏,则将它显现
+               $("#panel").show();  // 如果元素为隐藏,则将它显现
         }
         else {
-              $("#panel").hide();     //如果元素为显现,则将其隐藏
+              $("#panel").hide();  // 如果元素为显现,则将其隐藏
         }
       }
     </script>

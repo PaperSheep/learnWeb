@@ -15,36 +15,27 @@
     <button id="upload_button">提交</button>
     <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
     <script>
-        $(document).ready(function(){
-            function refresh(){
-                $.getJSON("{% url 'upload_file' %}", function (ret) {
-                    $('#result').html(ret.data1);
-                    $('#result2').html(ret.data2);
-                })
-            }
-            setInterval(refresh, 3000)
-        })
-    </script>
-    <script>
         $("#upload_button").click(function(){
             // 获取标签value
             var username = $("#username").val();
             var upload_file = $("#upload_file_ajax")[0].files[0];
 
             var formData = new FormData();
-            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}"); //必须写在模板中，才会被渲染)
-            formData.append("username", username);
-            formData.append("upload_file_ajax", upload_file);
+            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");  // 必须写在模板中，才会被渲染)
+            // formData.append("username", username);
+            // formData.append("upload_file_ajax", upload_file);
+            formData.append("word_type_pk", 1)
 
             $.ajax({
-                url : "/upload_file/",
-                type : "POST",
+                url : "/train/test2/",
+                type : "GET",
                 data : formData,
                 contentType : false,
                 processData : false,
 
-                success:function(){
-                    alert("上传成功!")
+                success:function(data){
+                    window.location = "/exam/"
+                    alert(data)
                 }
             });
         })
