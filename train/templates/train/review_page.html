@@ -36,7 +36,8 @@
                 <div id='WE1{{ forloop.counter }}'>
                     {% for i in word.english.english %}<span id='W1{{ forloop.parentloop.counter }}C{{ forloop.counter }}' data-last='{% if forloop.last %}true{% else %}false{% endif %}' class="letter{{ forloop.parentloop.counter }}" style="">{{ i }}</span>{% endfor %}
                 </div>
-                <div><button data-btnName="{{ forloop.counter }}" type="submit" class="btn btn-success" style="font-size: 16px;" onclick="showTip(this)">完成次数<span id="finishCount{{ forloop.counter }}" style="font-size: 16px;">0</span>/3(点击提示单词)</button></div>
+                <div><button data-btnName="{{ forloop.counter }}" type="submit" class="btn btn-success" style="font-size: 16px; padding: 2px 12px;" onclick="showTip(this)">完成次数<span id="finishCount{{ forloop.counter }}" style="font-size: 16px;">0</span>/3(点击提示单词)</button></div>
+                <div>/{{ word.english.phonetic_symbol }}/</div>
                 <div id='WC1{{ forloop.counter }}'>{{ word.english.chinese }}</div>
             </div>
         {% endfor %}

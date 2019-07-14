@@ -63,7 +63,7 @@ def user_out(request):
 
 # 注册
 def register(request):
-    context = {}
+    context = dict()
     if request.method == 'POST':
         context['register_form'] = UserCreationForm(request.POST)
         if context['register_form'].is_valid():
